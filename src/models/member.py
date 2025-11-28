@@ -22,3 +22,12 @@ class Member:
             "name": self.name,
             "joined_at": self.joined_at.isoformat(),
         }
+    
+    @classmethod
+    def from_dict(cls, data: dict) -> "Member":
+        return Member(
+                    telegram_id=data["telegram_id"],
+                    username=data["username"],
+                    name=data["name"],
+                    joined_at=data["joined_at"],
+                    )
