@@ -11,3 +11,6 @@ class Member:
         self.username = username
         self.name = name
         self.joined_at = joined_at if joined_at else datetime.now()
+
+    def __str__(self) -> str:
+        return self.name
