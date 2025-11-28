@@ -1,4 +1,5 @@
 from datetime import datetime
+from models import record
 from record import Record
 from rol import Rol
 
@@ -58,16 +59,16 @@ class Member:
             - "name" (str)
             - "rol" (Rol)
             - "status" (str)
-            - "record" (Rrecord)
+            - "record" (Rrecord | None)
             - "joined_at": string en formato ISO
         """
         return {
             "telegram_id": self.telegram_id,
             "username": self.username,
             "name": self.name,
-            "rol": self.rol,
+            "rol": self.rol.to_dict(),
             "status": self.status,
-            "record": self.record,
+            "record": self.record.to_dict() if self.record else None,
             "joined_at": self.joined_at.isoformat(),
         }
 
@@ -82,7 +83,7 @@ class Member:
                 - "name" (str)
                 - "rol" (Rol)
                 - "status" (str)
-                - "record" (Record)
+                - "record" (Record | None)
                 - "joined_at": string en formato ISO
 
 
@@ -93,8 +94,8 @@ class Member:
             telegram_id=data["telegram_id"],
             username=data["username"],
             name=data["name"],
-            rol=data["rol"],
+            rol=Rol.from_dict(data["rol"]),
             status=data["status"],
-            record=data["record"],
+            record=Record.from_dict(data["record"]),
             joined_at=datetime.fromisoformat(data["joined_at"]),
         )
