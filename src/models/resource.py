@@ -28,4 +28,3 @@ class Resource():
     
     def format_link(self) -> str:
         return (f"[{self.title()}]({self.url})")
-    
