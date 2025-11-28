@@ -14,3 +14,11 @@ class Member:
 
     def __str__(self) -> str:
         return self.name
+    
+    def to_dict(self) -> dict:
+        return {
+            "telegram_id": self.telegram_id,
+            "username": self.username,
+            "name": self.name,
+            "joined_at": self.joined_at.isoformat(),
+        }
