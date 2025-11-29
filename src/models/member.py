@@ -98,5 +98,14 @@ class Member:
             record=Record.from_dict(data["record"]),
             joined_at=datetime.fromisoformat(data["joined_at"]),
         )
+
     def have_permission(self, command: str) -> bool:
+        """Comprueba si el miembro tiene permiso de ejecutar un comando
+
+        Args:
+            command (str): El comando que se desea comprobar
+
+        Returns:
+            bool: Devuelve `True` o `False` en dependencia de si el miembro tiene permiso o no
+        """
         return self.bot_rol.can_access_command(command)
