@@ -27,6 +27,21 @@ class Event:
         }
         return dictionary
     
+    @classmethod
+    def from_dict(cls, data:dict)-> Event:
+        return cls(
+           id=data["id"],
+           title=data["title"],
+           description=data["description"],
+           date=datetime.fromisoformat(data["date"]),
+           location=data["location"] 
+        )
+        
+    def is_upcoming(self)->bool:
+        return self.date > datetime.now()
+    
+    
+    
     
         
         
