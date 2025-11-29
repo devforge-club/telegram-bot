@@ -39,3 +39,22 @@ class BotRol:
 
         self.allowed_commands.remove(comm)
         return True
+
+    def to_dict(self) -> dict:
+        return {
+            'key': self.key,
+            'name': self.name,
+            'hierarchy': self.hierarchy,
+            'allowed_commands': self.allowed_commands
+        }
+    
+    @classmethod
+    def from_dict(cls, data: dict) -> 'BotRol':
+        
+        return cls(
+            key=data['key'],
+            name=data['name'],
+            hierarchy=data['hierarchy'],
+            allowed_commands=data['allowed_commands'],
+        )
+    
