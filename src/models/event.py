@@ -1,5 +1,16 @@
 from datetime import datetime
 
+days = [
+    "Lunes", "Martes", "Miércoles", "Jueves",
+    "Viernes", "Sábado", "Domingo"
+    ]
+
+months = [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ]
+        
+
 class Event:
     id: int
     title: str
@@ -7,7 +18,7 @@ class Event:
     date: datetime
     location: str
     
-    def __init__(self, id, title, description, date, location):
+    def __init__(self, id: int, title:str, description: str, date: datetime, location: str):
         self.id = id
         self.title = title
         self.description = description
@@ -41,15 +52,6 @@ class Event:
         return self.date > datetime.now()
     
     def format_date(self) -> str:
-        days = [
-            "Lunes", "Martes", "Miércoles", "Jueves",
-            "Viernes", "Sábado", "Domingo"
-        ]
-
-        months = [
-            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-        ]
         
         day = days[self.date.weekday()]
         month = months[self.date.month - 1]
