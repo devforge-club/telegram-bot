@@ -1,4 +1,4 @@
-from src.logic.commands import clean_command
+from src.logic.commands import parse_command
 from src.utils.command_permissions import COMMAND_ALLOWLIST
 
 class BotRol:
@@ -15,7 +15,7 @@ class BotRol:
         return self.name
     
     def can_access_command(self, command: str) -> bool:
-        comm = clean_command(command)
+        comm = parse_command(command)[0]
         print(comm)
         if comm in COMMAND_ALLOWLIST and self.key in COMMAND_ALLOWLIST[comm]:
             return True

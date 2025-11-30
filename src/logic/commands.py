@@ -1,8 +1,8 @@
-def clean_command(command: str | list[str]) -> str | list[str]:
-
-    if type(command) is str:
-        return command[1:] if command[0]=="/" else command
+def parse_command(text: str) -> list[str]:
+   
+    text = text.strip()
     
-    arr = [comm[1:] if comm[0]=="/" else comm for comm in command]
-    
-    return arr
+    if text.startswith("/"):
+        text = text[1:]
+        
+    return text.split()
