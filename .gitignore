@@ -14,3 +14,7 @@ data/*.json
 
 # OS
 .DS_Store
+
+# Notes
+
+notes.md  
