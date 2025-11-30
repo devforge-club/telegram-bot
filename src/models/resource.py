@@ -20,11 +20,27 @@ class Resource():
     def __str__(self) -> str:
         return self.title
     
-    def to_dict() -> dict:
-        pass
-        
+    def to_dict(self) -> dict:
+        data = {
+                "id": self.id,
+                "title": self.title,
+                "url": self.url,
+                "category": self.category,
+                "added_by": self.added_by,
+                "added_at": self.added_at.isoformat()
+                }
+        return data
+    
+    @classmethod    
     def from_dict(cls, data: dict) -> Resource:
-        pass
+        dato: Resource
+        dato = cls(data["id"], 
+                   data["title"], 
+                   data["url"], 
+                   data["category"], 
+                   data["added_by"], 
+                   datetime.fromisoformat(data["added_at"]))
+        return dato
     
     def format_link(self) -> str:
         return (f"[{self.title()}]({self.url})")
