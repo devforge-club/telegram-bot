@@ -5,8 +5,9 @@ class BotRol:
     key: str
     name: str
     hierarchy: int
+    min_rank_required: int
 
-    def __init__(self, key: str, name: str, hierarchy: int) -> None:
+    def __init__(self, key: str, name: str, hierarchy: int, min_rank_required: int) -> None:
         self.key = key
         self.name = name
         self.hierarchy = hierarchy
@@ -27,6 +28,7 @@ class BotRol:
             "key": self.key,
             "name": self.name,
             "hierarchy": self.hierarchy,
+            "min_rank_required": self.min_rank_required
         }
     
     @classmethod
@@ -36,6 +38,7 @@ class BotRol:
             key=data["key"],
             name=data["name"],
             hierarchy=data["hierarchy"],
+            min_rank_required=data["min_rank_required"]
         )
 
 class Admin(BotRol):
@@ -44,7 +47,9 @@ class Admin(BotRol):
         super().__init__(
             key="admin", 
             name="Administrador", 
-            hierarchy=hierarchy)
+            hierarchy=hierarchy,
+            min_rank_required=1300
+            )
         
 class Member(BotRol):
 
@@ -52,7 +57,8 @@ class Member(BotRol):
         super().__init__(
             key="member", 
             name="Miembro", 
-            hierarchy=hierarchy)
+            hierarchy=hierarchy,
+            min_rank_required=0)
 
 class Guest(BotRol):
 
@@ -60,4 +66,5 @@ class Guest(BotRol):
         super().__init__(
             key="guest", 
             name="Invitado", 
-            hierarchy=1)
+            hierarchy=1,
+            min_rank_required=0)
