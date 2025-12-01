@@ -43,3 +43,14 @@ class Reminder:
             "remind_at": self.remind_at.isoformat(),
             "created_at": self.created_at.isoformat(),
         }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "Reminder":
+        return cls(
+            user_id=data["user_id"],
+            message=data["message"],
+            remind_at=data["remind_at"],
+            chat_id=data["chat_id"],
+            id=data["id"],
+            created_at=data["created_at"],
+        )
