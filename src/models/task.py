@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 from enum import Enum
+from src.utils.issue_difficulty import IssueDifficulty
 
 
 class TaskType(Enum):
@@ -20,36 +21,24 @@ class TaskStatus(Enum):
     OVERDUE = "OVERDUE"
 
 
-class IssueDifficulty:
-    def __init__(self, name: str, display_name: str, points: int):
-        self.name = name
-        self.display_name = display_name
-        self.points = points
-
-
-EASY = IssueDifficulty("EASY", "Fácil", 10)
-MEDIUM = IssueDifficulty("MEDIUM", "Medio", 25)
-HARD = IssueDifficulty("HARD", "Difícil", 50)
-
-
 class Task:
-    id: uuid.UUID
+    id: str
     title: str
-    description: Optional[str]
+    description: str | None
     task_type: TaskType
     assigned_to: str
     created_by: str
-    project_url: Optional[str]
-    github_url: Optional[str]
-    github_number: Optional[int]
+    project_url: str | None
+    github_url: str | None
+    github_number: str | None
     difficulty: IssueDifficulty
     points_reward: int
     status: TaskStatus
-    due_date: Optional[datetime]
+    due_date: datetime | None
     created_at: datetime
-    started_at: Optional[datetime]
-    completed_at: Optional[datetime]
-    notes: Optional[List[Dict]]
+    started_at: datetime | None
+    completed_at: datetime | None
+    notes: List[Dict] | None
 
     def __init__(
         self,
@@ -58,20 +47,20 @@ class Task:
         created_by: str,
         difficulty: IssueDifficulty,
         task_type: TaskType = TaskType.CUSTOM,
-        description: Optional[str] = None,
-        project_url: Optional[str] = None,
-        github_url: Optional[str] = None,
-        github_number: Optional[int] = None,
-        due_date: Optional[datetime] = None,
-        created_at: Optional[datetime] = None,
+        description: str | None = None,
+        project_url: str | None = None,
+        github_url: str | None = None,
+        github_number: int | None = None,
+        due_date: datetime | None = None,
+        created_at: datetime | None = None,
         status: TaskStatus = TaskStatus.PENDING,
-        started_at: Optional[datetime] = None,
-        completed_at: Optional[datetime] = None,
-        notes: Optional[List[Dict]] = None,
-        task_id: Optional[uuid.UUID] = None,
+        started_at: datetime | None = None,
+        completed_at: datetime | None = None,
+        notes: List[Dict] | None = None,
+        task_id: str | None = None,
     ):
         # informacion basica
-        self.id = task_id or uuid.uuid4()
+        self.id = task_id or str(uuid.uuid4())
         self.title = title
         self.description = description
         self.task_type = task_type
@@ -106,27 +95,21 @@ class Task:
 
     def complete(self) -> Dict:
         """Completa la tarea y retorna información sobre la completación"""
-        if self.status in [TaskStatus.COMPLETED, TaskStatus.CANCELLED]:
-            return {
-                "success": False,
-                "was_on_time": False,
-                "points_earned": 0,
-                "task_type": self.task_type,
-            }
 
-        # Marcar como completada
-        self.status = TaskStatus.COMPLETED
-        self.completed_at = datetime.now()
-
-        # Verificar si fue a tiempo
-        was_on_time = True
-        if self.due_date:
-            was_on_time = self.completed_at <= self.due_date
-
+        success = (
+            True
+            if self.status not in [TaskStatus.COMPLETED, TaskStatus.CANCELLED]
+            else False
+        )
+        if success:
+            self.status = TaskStatus.COMPLETED
+            self.completed_at = datetime.now()
         return {
-            "success": True,
-            "was_on_time": was_on_time,
-            "points_earned": self.points_reward,
+            "success": success,
+            "was_on_time": (
+                True if self.due_date and self.completed_at <= self.due_date else False
+            ),
+            "points_earned": self.points_reward if success else 0,
             "task_type": self.task_type,
         }
 
@@ -152,10 +135,7 @@ class Task:
 
     def update_status_if_overdue(self) -> bool:
         """Actualiza el estado a OVERDUE si corresponde"""
-        if self.is_overdue() and self.status in [
-            TaskStatus.PENDING,
-            TaskStatus.IN_PROGRESS,
-        ]:
+        if self.is_overdue():
             self.status = TaskStatus.OVERDUE
             return True
         return False
@@ -199,7 +179,7 @@ class Task:
         return {
             "has_deadline": True,
             "is_overdue": is_overdue,
-            "days": -days if is_overdue else days,
+            "days": days,
             "hours": hours,
             "human_readable": human_readable,
         }
@@ -231,7 +211,7 @@ class Task:
     def to_dict(self) -> Dict:
         """Serializa la tarea a diccionario para guardar en BD"""
         return {
-            "id": str(self.id),
+            "id": self.id,
             "title": self.title,
             "description": self.description,
             "task_type": self.task_type.value,
@@ -240,7 +220,7 @@ class Task:
             "project_url": self.project_url,
             "github_url": self.github_url,
             "github_number": self.github_number,
-            "difficulty": self.difficulty.name,  # Guardar el nombre de la dificultad
+            "difficulty": self.difficulty.display_name,  # Guardar el nombre de la dificultad
             "points_reward": self.points_reward,
             "status": self.status.value,
             "due_date": self.due_date.isoformat() if self.due_date else None,
@@ -256,7 +236,6 @@ class Task:
     def from_dict(cls, data: Dict) -> "Task":
         """Crea una instancia de Task desde un diccionario"""
         # Mapeo de dificultades (deberías tenerlas definidas en algún lugar)
-        difficulty_map = {"EASY": EASY, "MEDIUM": MEDIUM, "HARD": HARD}
 
         # Reconstruir fechas desde strings ISO
         due_date = None
@@ -280,7 +259,7 @@ class Task:
             title=data["title"],
             assigned_to=data["assigned_to"],
             created_by=data["created_by"],
-            difficulty=difficulty_map.get(data["difficulty"], MEDIUM),
+            difficulty=IssueDifficulty.get_difficulty_by_name(data["difficulty"]),
             task_type=TaskType(data.get("task_type", "CUSTOM")),
             description=data.get("description"),
             project_url=data.get("project_url"),
@@ -292,5 +271,5 @@ class Task:
             started_at=started_at,
             completed_at=completed_at,
             notes=data.get("notes", []),
-            task_id=uuid.UUID(data["id"]) if "id" in data else None,
+            task_id=data["id"],
         )
