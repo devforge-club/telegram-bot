@@ -1,5 +1,6 @@
 from datetime import datetime
 from uuid import uuid4
+from typing import Self
 
 
 class Reminder:
@@ -76,7 +77,7 @@ class Reminder:
         }
 
     @classmethod
-    def from_dict(cls, data: dict) -> "Reminder":
+    def from_dict(cls, data: dict) -> Self:
         """Devuelve una instancia de la clase a partir de un diccionario
 
         Args:
