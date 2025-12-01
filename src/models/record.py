@@ -2,12 +2,10 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Set, List, Optional
 from src.utils.forge_rank import ForgeRank
-
+from src.utils.formatters import int_to_roman
 
 @dataclass
 class Record:
-    # Identification
-    telegram_id: str
 
     # Core metrics
     score: int = 0
@@ -81,8 +79,8 @@ class Record:
         self.last_strike_date = timestamp
 
     def remove_strike(self, reason: str, details: str = "") -> bool:
-        if self.strike > 0:
-            self.strike -= 1
+        if self.strikes > 0:
+            self.strikes -= 1
             self.strike_history.append(
                 {
                     "timestamp": datetime.now(),
@@ -93,3 +91,31 @@ class Record:
             )
             return True
         return False
+
+    def ascend_to_legend(self) -> dict:
+        success = self.score >= 4500
+        old_rank = self.rank
+
+        if success:
+            self.legend_level += 1
+            self.score = 0
+            self.rank = ForgeRank.ORE
+            self.rank_history.append(
+                {
+                    "timestamp": datetime.now(),
+                    "old_rank": old_rank,
+                    "new_rank": self.rank,
+                    "legend_ascension": f"Ascended to Legend {int_to_roman(self.legend_level)}! Your journey begins anew.",
+                }
+            )
+        message = (
+            f"A legend of level {self.legend_level} was born!"
+            if success
+            else f"It's not time to be reborn yet, you still need to gain more experience. Actual experience points: {self.score}"
+        )
+        return {
+            "success": success,
+            "legend_level": self.legend_level,
+            "previous_rank": old_rank,
+            "message": message,
+        }
