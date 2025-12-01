@@ -1,8 +1,11 @@
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Set, List, Optional
+from typing import Set, List, Optional, Self, Dict, Any
 from src.utils.forge_rank import ForgeRank
 from src.utils.formatters import int_to_roman
+
+LEGEND_ASCENSION_THRESHOLD = 4500
+
 
 @dataclass
 class Record:
@@ -34,7 +37,7 @@ class Record:
     score_history: List[dict] = field(default_factory=list)
     rank_history: List[dict] = field(default_factory=list)
 
-    def add_score(self, points: int, reason: str) -> dict:
+    def add_score(self, points: int, reason: str) -> Dict[str, Any]:
         if points <= 0:
             raise ValueError(f"Points must be greater than zero, got: {points}")
         self.score += points
@@ -51,8 +54,8 @@ class Record:
             self.rank_history.append(
                 {
                     "timestamp": timestamp,
-                    "old_rank": old_rank,
-                    "new_rank": new_rank,
+                    "old_rank": old_rank.display_name,
+                    "new_rank": new_rank.display_name,
                 }
             )
 
@@ -60,8 +63,8 @@ class Record:
 
         return {
             "rank_up": rank_up,
-            "old_rank": old_rank,
-            "new_rank": new_rank,
+            "old_rank": old_rank.display_name,
+            "new_rank": new_rank.display_name,
             "points_gained": points,
         }
 
@@ -92,8 +95,8 @@ class Record:
             return True
         return False
 
-    def ascend_to_legend(self) -> dict:
-        success = self.score >= 4500
+    def ascend_to_legend(self) -> Dict[str, Any]:
+        success = self.score >= LEGEND_ASCENSION_THRESHOLD
         old_rank = self.rank
 
         if success:
@@ -103,8 +106,8 @@ class Record:
             self.rank_history.append(
                 {
                     "timestamp": datetime.now(),
-                    "old_rank": old_rank,
-                    "new_rank": self.rank,
+                    "old_rank": old_rank.display_name,
+                    "new_rank": self.rank.display_name,
                     "legend_ascension": f"Ascended to Legend {int_to_roman(self.legend_level)}! Your journey begins anew.",
                 }
             )
@@ -116,6 +119,28 @@ class Record:
         return {
             "success": success,
             "legend_level": self.legend_level,
-            "previous_rank": old_rank,
+            "previous_rank": old_rank.display_name,
             "message": message,
+        }
+
+    def get_progress_to_next_rank(self) -> Dict[str, Any]:
+        next_rank = ForgeRank.get_next_rank(self.rank)
+        if next_rank is None:
+            progress_percentage = 100.0
+            points_needed = 0
+            next_rank_name = None
+        else:
+            points_in_current = self.score - self.rank.min_score
+            segment_size = next_rank.min_score - self.rank.min_score
+            progress_percentage = (points_in_current / segment_size) * 100.0
+            points_needed = next_rank.min_score - self.score
+            next_rank_name = next_rank.display_name
+
+        return {
+            "current_rank": self.rank.display_name,
+            "next_rank": next_rank_name,
+            "progress_percentage": round(progress_percentage, 2),
+            "points_needed": max(0, points_needed),
+            "current_score": self.score,
+            "legend_eligible": self.score >= LEGEND_ASCENSION_THRESHOLD,
         }
