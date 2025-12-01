@@ -28,12 +28,12 @@ class Record:
     # Strikes
     strikes: int = 0
     strike_history: List[dict] = field(default_factory=list)
-    last_strike_date: Optional[datetime] = None
+    last_strike_date: datetime | None = None
     is_in_good_standing: bool = True
 
     # Control & metadata
     current_projects: Set[str] = field(default_factory=set)
-    last_github_sync: Optional[datetime] = None
+    last_github_sync: datetime | None = None
     score_history: List[dict] = field(default_factory=list)
     rank_history: List[dict] = field(default_factory=list)
 
