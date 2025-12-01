@@ -79,3 +79,17 @@ class Record:
             }
         )
         self.last_strike_date = timestamp
+
+    def remove_strike(self, reason: str, details: str = "") -> bool:
+        if self.strike > 0:
+            self.strike -= 1
+            self.strike_history.append(
+                {
+                    "timestamp": datetime.now(),
+                    "action": "removed",
+                    "reason": reason,
+                    "details": details,
+                }
+            )
+            return True
+        return False
