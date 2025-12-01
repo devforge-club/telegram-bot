@@ -28,4 +28,18 @@ class Reminder:
             datetime.fromisoformat(created_at) if created_at else datetime.now()
         )
 
+    def __str__(self) -> str:
+        return f"Recordatorio para {self.user_id} a las {self.remind_at} con el mensaje: '{self.message}'"
 
+    def is_due(self) -> bool:
+        return datetime.now() >= self.remind_at
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "chat_id": self.chat_id,
+            "message": self.message,
+            "remind_at": self.remind_at.isoformat(),
+            "created_at": self.created_at.isoformat(),
+        }
