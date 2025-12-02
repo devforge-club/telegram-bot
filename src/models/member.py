@@ -1,6 +1,8 @@
 from datetime import datetime
 from .record import Record
 from .bot_rol import BotRol
+from .dev_role import DevRole
+from typing import Self
 
 
 class Member:
@@ -15,6 +17,7 @@ class Member:
     status: str
     record: Record | None
     joined_at: datetime
+    dev_rol: DevRole 
 
     def __init__(
         self,
@@ -25,6 +28,7 @@ class Member:
         status: str,
         record: Record | None = None,
         joined_at: datetime | None = None,
+        dev_rol: DevRole | None = None,
     ):
         """Constructor de la clase miembro
 
@@ -36,6 +40,7 @@ class Member:
             status (str):
             record: (Record):
             joined_at (datetime | None, optional): En caso de ser None se toma el valor de datetime.now(). Defaults to None.
+            dev_rol: (DevRole):
         """
         self.telegram_id = telegram_id
         self.username = username
@@ -44,6 +49,7 @@ class Member:
         self.status = status
         self.record = record
         self.joined_at = joined_at if joined_at else datetime.now()
+        self.dev_rol = dev_rol
 
     def __str__(self) -> str:
         return self.name
@@ -69,10 +75,11 @@ class Member:
             "status": self.status,
             "record": self.record.to_dict() if self.record else None,
             "joined_at": self.joined_at.isoformat(),
+            "dev_rol": self.dev_rol.to_dict() if self.dev_rol else None,
         }
 
     @classmethod
-    def from_dict(cls, data: dict) -> "Member":
+    def from_dict(cls, data: dict) -> Self:
         """Crea una instancia de la clase a partir de un diccionario
 
         Args:
@@ -95,8 +102,9 @@ class Member:
             name=data["name"],
             bot_rol=BotRol.from_dict(data["bot_rol"]),
             status=data["status"],
-            record=Record.from_dict(data["record"]),
+            record=Record.from_dict(data["record"]) if data["record"] else None,
             joined_at=datetime.fromisoformat(data["joined_at"]),
+            dev_rol=DevRole.from_dict(data["dev_rol"]) if data["dev_rol"] else None,
         )
 
     def have_permission(self, command: str) -> bool:
