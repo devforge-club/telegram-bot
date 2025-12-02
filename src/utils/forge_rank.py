@@ -31,7 +31,14 @@ class ForgeRank(Enum):
         return cls.ORE
 
     @classmethod
-    def get_next_rank(cls, current_rank: Self) -> Optional[Self]:
+    def get_rank_by_display_name(cls, name: str) -> Self | None:
+        for rank in cls:
+            if rank.display_name == name:
+                return rank
+        return None
+
+    @classmethod
+    def get_next_rank(cls, current_rank: Self) -> Self | None:
         for rank in cls:
             if current_rank.level + 1 == rank.level:
                 return rank
