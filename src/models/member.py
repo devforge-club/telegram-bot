@@ -1,6 +1,6 @@
 from datetime import datetime
 from .record import Record
-from .bot_rol import BotRol
+from .bot_rol import BotRol, Guest
 from .dev_role import DevRole
 from typing import Self
 
@@ -24,7 +24,6 @@ class Member:
         username: str,
         name: str,
         bot_rol: BotRol,
-        record: Record | None = None,
         joined_at: datetime | None = None,
         dev_rol: DevRole | None = None,
     ):
@@ -43,7 +42,7 @@ class Member:
         self.username = username
         self.name = name
         self.bot_rol = bot_rol
-        self.record = record
+        self.record = Record() if not isinstance(self.bot_rol, Guest) else None
         self.joined_at = joined_at if joined_at else datetime.now()
         self.dev_rol = dev_rol
 
