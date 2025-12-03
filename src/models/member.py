@@ -1,6 +1,6 @@
 from datetime import datetime
 from .record import Record
-from .bot_rol import BotRol
+from .bot_rol import BotRol, Guest
 
 
 class Member:
@@ -31,9 +31,11 @@ class Member:
             username (str):
             name (str):
             bot_rol (BotRol):
-            record: (Record):
+            record: (Record): si es `None`, se evalua `bot_rol`, si es `Guest` se mantiene `None`, si no, se crea una nueva instancia de `Record`
             joined_at (datetime | None, optional): En caso de ser None se toma el valor de datetime.now(). Defaults to None.
         """
+        record = None if (not record and bot_rol is Guest) else Record()
+
         self.telegram_id = telegram_id
         self.username = username
         self.name = name
