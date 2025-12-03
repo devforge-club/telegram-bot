@@ -1,27 +1,26 @@
 from datetime import datetime
+from typing import Self
+import uuid
 class Resource:
-    id: int
+    id: uuid
     title: str
     url: str
     category: str
     added_by: str
     added_at: datetime
     
-    def __init__ (self, id, title, url, category, added_by, added_at = None):
-        self.id = id
+    def __init__ (self, title, url, category, added_by, added_at = None):
+        self.id = str(uuid.uuid4)
         self.title = title
         self.url = url
         self.category = added_by
-        if not self.added_at:
-            self.added_at = datetime.now()
-        else:
-            self.added_at = added_at
+        self.added_at = added_at if added_at is not None else datetime.now()
     
     def __str__(self) -> str:
         return self.title
     
     def to_dict(self) -> dict:
-        data = {
+        return {
                 "id": self.id,
                 "title": self.title,
                 "url": self.url,
@@ -29,18 +28,15 @@ class Resource:
                 "added_by": self.added_by,
                 "added_at": self.added_at.isoformat()
                 }
-        return data
     
     @classmethod    
-    def from_dict(cls, data: dict):
-        dato: Resource
-        dato = cls(data["id"], 
+    def from_dict(cls, data: dict) -> Self:
+        return cls(data["id"], 
                    data["title"], 
                    data["url"], 
                    data["category"], 
                    data["added_by"], 
                    datetime.fromisoformat(data["added_at"]))
-        return dato
     
     def format_link(self) -> str:
         return (f"[{self.title}]({self.url})")
