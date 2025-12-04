@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Self
-import uuid
+from uuid import uuid4
 class Resource:
     id: str
     title: str
@@ -9,12 +9,19 @@ class Resource:
     added_by: str
     added_at: datetime
     
-    def __init__ (self, title, url, category, added_by, added_at = None):
-        self.id = str(uuid.uuid4)
+    def __init__ (self,
+                  title: str, 
+                  url: str, 
+                  category: str, 
+                  added_by: str, 
+                  added_at: datetime | None = None,
+                  id: str | None = None,):
+        self.id = id if id else str(uuid4())
         self.title = title
         self.url = url
-        self.category = added_by
-        self.added_at = added_at if added_at is not None else datetime.now()
+        self.category = category
+        self.added_by = added_by
+        self.added_at = added_at if added_at else datetime.now()
     
     def __str__(self) -> str:
         return self.title
@@ -31,12 +38,12 @@ class Resource:
     
     @classmethod    
     def from_dict(cls, data: dict) -> Self:
-        return cls(data["id"], 
-                   data["title"], 
-                   data["url"], 
-                   data["category"], 
-                   data["added_by"], 
-                   datetime.fromisoformat(data["added_at"]))
+        return cls(id=data["id"], 
+                   title=data["title"], 
+                   url=data["url"], 
+                   category=data["category"], 
+                   added_by=data["added_by"], 
+                   added_at=datetime.fromisoformat(data["added_at"]))
     
     def format_link(self) -> str:
         return (f"[{self.title}]({self.url})")
