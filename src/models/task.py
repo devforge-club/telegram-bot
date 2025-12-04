@@ -1,6 +1,6 @@
 import uuid
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional
+from datetime import datetime
+from typing import Dict, List, Any, Self
 from enum import Enum
 from src.utils.issue_difficulty import IssueDifficulty
 
@@ -30,7 +30,7 @@ class Task:
     created_by: str
     project_url: str | None
     github_url: str | None
-    github_number: str | None
+    github_task_number: str | None
     difficulty: IssueDifficulty
     points_reward: int
     status: TaskStatus
@@ -38,7 +38,7 @@ class Task:
     created_at: datetime
     started_at: datetime | None
     completed_at: datetime | None
-    notes: List[Dict] | None
+    notes: List[Dict[str, Any]] | None
 
     def __init__(
         self,
@@ -50,7 +50,7 @@ class Task:
         description: str | None = None,
         project_url: str | None = None,
         github_url: str | None = None,
-        github_number: int | None = None,
+        github_task_number: int | None = None,
         due_date: datetime | None = None,
         created_at: datetime | None = None,
         status: TaskStatus = TaskStatus.PENDING,
@@ -70,7 +70,7 @@ class Task:
         self.project_url = project_url
         # Github
         self.github_url = github_url
-        self.github_number = github_number
+        self.github_task_number = github_task_number
         # Dificultad y puntos
         self.difficulty = difficulty
         self.points_reward = difficulty.points
@@ -93,7 +93,7 @@ class Task:
             return True
         return False
 
-    def complete(self) -> Dict:
+    def complete(self) -> Dict[str, Any]:
         """Completa la tarea y retorna información sobre la completación"""
 
         success = (
@@ -140,7 +140,7 @@ class Task:
             return True
         return False
 
-    def get_time_remaining(self) -> Dict:
+    def get_time_remaining(self) -> Dict[str, Any]:
         """Calcula el tiempo restante hasta la fecha límite"""
         if not self.due_date:
             return {
@@ -208,7 +208,7 @@ class Task:
         delta = datetime.now() - self.created_at
         return delta.days
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> Dict[str, Any]:
         """Serializa la tarea a diccionario para guardar en BD"""
         return {
             "id": self.id,
@@ -219,8 +219,8 @@ class Task:
             "created_by": self.created_by,
             "project_url": self.project_url,
             "github_url": self.github_url,
-            "github_number": self.github_number,
-            "difficulty": self.difficulty.display_name,  # Guardar el nombre de la dificultad
+            "github_task_number": self.github_task_number,
+            "difficulty": self.difficulty.display_name,
             "points_reward": self.points_reward,
             "status": self.status.value,
             "due_date": self.due_date.isoformat() if self.due_date else None,
@@ -233,28 +233,24 @@ class Task:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict) -> "Task":
+    def from_dict(cls, data: Dict[str, Any]) -> Self:
         """Crea una instancia de Task desde un diccionario"""
-        # Mapeo de dificultades (deberías tenerlas definidas en algún lugar)
-
-        # Reconstruir fechas desde strings ISO
-        due_date = None
+        data_due_date = None
         if data.get("due_date"):
-            due_date = datetime.fromisoformat(data["due_date"])
+            data_due_date = datetime.fromisoformat(data["due_date"])
 
-        created_at = None
+        data_created_at = None
         if data.get("created_at"):
-            created_at = datetime.fromisoformat(data["created_at"])
+            data_created_at = datetime.fromisoformat(data["created_at"])
 
-        started_at = None
+        data_started_at = None
         if data.get("started_at"):
-            started_at = datetime.fromisoformat(data["started_at"])
+            data_started_at = datetime.fromisoformat(data["started_at"])
 
-        completed_at = None
+        data_completed_at = None
         if data.get("completed_at"):
-            completed_at = datetime.fromisoformat(data["completed_at"])
+            data_completed_at = datetime.fromisoformat(data["completed_at"])
 
-        # Crear instancia
         return cls(
             title=data["title"],
             assigned_to=data["assigned_to"],
@@ -264,12 +260,12 @@ class Task:
             description=data.get("description"),
             project_url=data.get("project_url"),
             github_url=data.get("github_url"),
-            github_number=data.get("github_number"),
-            due_date=due_date,
-            created_at=created_at,
+            github_task_number=data.get("github_task_number"),
+            due_date=data_due_date,
+            created_at=data_created_at,
             status=TaskStatus(data.get("status", "PENDING")),
-            started_at=started_at,
-            completed_at=completed_at,
+            started_at=data_started_at,
+            completed_at=data_completed_at,
             notes=data.get("notes", []),
             task_id=data["id"],
         )
