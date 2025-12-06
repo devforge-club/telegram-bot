@@ -1,15 +1,15 @@
 from datetime import datetime
 from uuid import uuid4
 from typing import Self
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class Reminder(BaseModel):
-    id: str
-    user_id: str
-    chat_id: str
-    message: str
-    remind_at: datetime
-    created_at: datetime
+    user_id: str = Field(min_length=1, max_length=24)
+    message: str = Field(min_length=1, max_length=48)
+    remind_at: str
+    chat_id: str = Field(default=user_id)
+    id: str = Field(default=uuid4())
+    created_at: str = Field(default=datetime.now())
 
     """Clase que representa un recordatorio personal programado
         Args:

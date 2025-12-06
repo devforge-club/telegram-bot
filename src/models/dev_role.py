@@ -5,27 +5,51 @@ class DevRole(BaseModel):
     key: str
     name: str
     icon: str
+    
+    def __str__(self) -> str:
+        return f"<dev_role>: {self.name} {self.icon}"
 
 class Backend(DevRole):
-        key = "backend", 
-        name = "Backend Developer", 
-        icon = "⚙️"
-        
+        def __init__(self):
+            defaults = {
+                "key":"backend",
+                "name":"Backend Developer",
+                "icon":"⚙️"
+                
+            }
+            super().__init__(**defaults)
+            
 class Frontend(DevRole):
-            key = "frontend", 
-            name = "Frontend Developer", 
-            icon = "🎨"
-        
+        def __init__(self):
+            defaults = {
+                "key":"frontend",
+                "name":"Frontend Developer",
+                "icon":"🎨"
+                
+            }
+            super().__init__(**defaults)
+            
+
 class Tester(DevRole):
-            key = "tester", 
-            name = "QA Tester", 
-            icon = "🧪"
+        def __init__(self):
+            defaults = {
+                "key":"tester",
+                "name":"QA Tester",
+                "icon":"🧪"
+                
+            }
+            super().__init__(**defaults)    
+            
         
 class DevOps(DevRole):
-            key = "devops", 
-            name = "DevOps Engineer", 
-            icon = "☁️"
-
+        def __init__(self):
+            defaults = {
+                "key":"devops",
+                "name":"DevOps Engineer",
+                "icon":"☁️"
+                
+            }
+            super().__init__(**defaults)
         
         
 

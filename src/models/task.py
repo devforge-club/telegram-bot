@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Dict, List, Any, Self
 from enum import Enum
 from src.utils.issue_difficulty import IssueDifficulty
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class TaskType(Enum):
@@ -24,23 +24,23 @@ class TaskStatus(Enum):
 
 class Task(BaseModel):
     # informacion basica
-    id: str
-    title: str
-    description: str | None
+    id: str = Field(min_length=1, max_length=12)
+    title: str = Field(min_length=4, max_length = 40)
+    description: str = Field(min_length=8, max_length=256, default=None)
     task_type: TaskType
     # Asigancion
-    assigned_to: str
-    created_by: str
-    project_url: str | None
+    assigned_to: str = Field(min_length=1)
+    created_by: str = Field(min_length=1)
+    project_url: str = Field(min_length=1, default=None)
     # Github
-    github_url: str | None
-    github_task_number: str | None
+    github_url: str = Field(min_length=1, default=None)
+    github_task_number: str = Field(min_length=1, default=None)
     # Dificultad y puntos
     difficulty: IssueDifficulty
-    points_reward: int
+    points_reward: int = Field(gt=0)
     # Fechas y estado
     status: TaskStatus
-    due_date: datetime | None
+    due_date: datetime | None 
     created_at: datetime
     started_at: datetime | None
     completed_at: datetime | None
