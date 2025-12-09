@@ -9,15 +9,19 @@ COMMAND_ALLOWLIST = {
     "confirmar": {"member", "admin"},
     "ausente": {"member", "admin"},
     "quien_viene": {"member", "admin"},
+    
     "recurso": {"member", "admin"},
     "agregar_recurso": {"member", "admin"},
     "recursos_recientes": {"member", "admin"},
     "categorias": {"member", "admin"},
+    
     "recordar": {"member", "admin"},
     "recordatorios": {"member", "admin"},
+    
     "github_status": {"member", "admin"},
     "mis_prs": {"member", "admin"},
     "mis_issues": {"member", "admin"},
+    
     "mi_perfil": {"member", "admin"},
     "tareas": {"member", "admin"},
     "stats": {"member", "admin"},
