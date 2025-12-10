@@ -1,7 +1,7 @@
 # Comandos a soportar:
 # "start", "ayuda", "sobre"
 from aiogram import Router
-from aiogram.filters import CommandStart, Command
+from aiogram.filters import CommandStart
 from aiogram.types import Message
 
 import random
@@ -17,4 +17,3 @@ router = Router()
 @router.message(CommandStart())
 async def start_handler(message: Message):
     await message.answer(random.choice(START_PHRASES))
-
