@@ -1,4 +1,4 @@
-import uuid
+from uuid import uuid4
 from datetime import datetime
 from typing import Dict, List, Any, Self
 from enum import Enum
@@ -24,17 +24,17 @@ class TaskStatus(Enum):
 
 class Task(BaseModel):
     # informacion basica
-    id: str = Field(min_length=1, max_length=12)
-    title: str = Field(min_length=4, max_length = 40)
-    description: str = Field(min_length=8, max_length=256, default=None)
+    id: str = Field(default_factory=lambda: str(uuid4()))
+    title: str = Field(min_length=4)
+    description: str | None = Field(min_length=8, default=None)
     task_type: TaskType
     # Asigancion
     assigned_to: str = Field(min_length=1)
     created_by: str = Field(min_length=1)
-    project_url: str = Field(min_length=1, default=None)
+    project_url: str | None = Field(min_length=1, default=None)
     # Github
-    github_url: str = Field(min_length=1, default=None)
-    github_task_number: str = Field(min_length=1, default=None)
+    github_url: str | None = Field(min_length=1, default=None)
+    github_task_number: str | None = Field(min_length=1, default=None)
     # Dificultad y puntos
     difficulty: IssueDifficulty
     points_reward: int = Field(gt=0)

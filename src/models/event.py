@@ -1,4 +1,5 @@
 from datetime import datetime
+from uuid import uuid4
 from pydantic import BaseModel, Field
 
 days = [
@@ -13,14 +14,14 @@ months = [
         
 
 class Event(BaseModel):
-    id: int = Field(gt=0, le=1024)
+    id: str = Field(default_factory=lambda: str(uuid4()))
     title: str = Field(min_length=8, max_length=64)
     description: str = Field(min_length=24, max_length=256)
     date: datetime
     location: str = Field(min_length=8)
     
     def __str__(self)-> str:
-        return f"<event>: {self.title}, <id>: {self.id}, <date;location>: {self.date};{self.location}"
+        return f"📍{self.title}, {self.date}, {self.location}"
     
     def is_upcoming(self)-> bool:
         return self.date > datetime.now()

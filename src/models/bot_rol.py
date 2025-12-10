@@ -9,7 +9,7 @@ class BotRol(BaseModel):
     min_rank_required: int
     
     def __str__(self) -> str:
-        return f"<bot_rol>: {self.key}"
+        return f"Comunity Rol: {self.name}"
     
     def can_access_command(self, command: str) -> bool:
         comm = parse_command(command)[0]
@@ -19,33 +19,33 @@ class BotRol(BaseModel):
         return False
 
 class Admin(BotRol):
-        def __init__(self):
-            defaults = {
-                    "key":"admin", 
-                    "name":"Administrador", 
-                    "hierarchy":100,
-                    "min_rank_required":1300
-            }
-            super().__init__(**defaults)
+    def __init__(self):
+        defaults = {
+            "key":"admin", 
+            "name":"Administrador", 
+            "hierarchy":100,
+            "min_rank_required":1300
+        }
+        super().__init__(**defaults)
  
 class Member(BotRol):
-        def __init__(self):
-            defaults = {
-                        "key":"member", 
-                        "name":"Miembro", 
-                        "hierarchy":25,
-                        "min_rank_required":0
-            }
-            super().__init__(**defaults)
+    def __init__(self):
+        defaults = {
+                "key":"member", 
+                "name":"Miembro", 
+                "hierarchy":25,
+                "min_rank_required":0
+        }
+        super().__init__(**defaults)
 
 
 class Guest(BotRol):
     def __init__(self):
-            defaults = {
-                        "key":"guest", 
-                        "name":"Invitado", 
-                        "hierarchy":1,
-                        "min_rank_required":0
-            }
-            super().__init__(**defaults)
+        defaults = {
+                "key":"guest", 
+                "name":"Invitado", 
+                "hierarchy":1,
+                "min_rank_required":0
+        }
+        super().__init__(**defaults)
     

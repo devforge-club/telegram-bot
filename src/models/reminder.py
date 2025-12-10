@@ -1,15 +1,21 @@
 from datetime import datetime
 from uuid import uuid4
 from typing import Self
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 class Reminder(BaseModel):
     user_id: str = Field(min_length=1, max_length=24)
-    message: str = Field(min_length=1, max_length=48)
-    remind_at: str
-    chat_id: str = Field(default=user_id)
-    id: str = Field(default=uuid4())
-    created_at: str = Field(default=datetime.now())
+    message: str = Field(min_length=1)
+    remind_at: datetime
+    chat_id: str | None = None
+    id: str = Field(default_factory=lambda: str(uuid4()))
+    created_at: datetime = Field(default_factory=lambda: datetime.now())
+    
+    @model_validator(mode='after')
+    def set_default_chat_id(self):
+        if self.chat_id is None:
+            self.chat_id = self.user_id
+        return self
 
     """Clase que representa un recordatorio personal programado
         Args:
