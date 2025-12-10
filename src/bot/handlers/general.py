@@ -1,5 +1,5 @@
 # Comandos a soportar:
-# "start", "ayuda", "sobre"
+# "start", "help", "about"
 from aiogram import Router
 from aiogram.filters import CommandStart
 from aiogram.types import Message

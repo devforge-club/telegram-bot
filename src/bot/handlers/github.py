@@ -1,2 +1,2 @@
 # Comandos a soportar:
-# "github_status", "mis_prs", "mis_issues"
+# "github_status", "my_prs", "my_issues"

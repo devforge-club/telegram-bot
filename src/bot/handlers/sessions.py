@@ -1,2 +1,2 @@
 # Comandos a soportar:
-# "proxima_sesion", "confirmar", "ausente", "quien_viene"
+# "next_session", "confirm", "absent", "who_comes"

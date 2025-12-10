@@ -1,2 +1,2 @@
 # Comandos a soportar:
-# "recurso", "agregar_recurso", "recursos_recientes", "categorias"
+# "resource", "add_resource", "recent_resources", "categories"

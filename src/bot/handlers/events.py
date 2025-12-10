@@ -1,0 +1,1 @@
+# Para soportar eventos como la entrada de un nuevo miembro, etc.

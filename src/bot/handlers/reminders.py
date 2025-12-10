@@ -1,2 +1,2 @@
 # Comandos a soportar:
-# "recordar", "recordatorios"
+# "remaind", "remainders"
