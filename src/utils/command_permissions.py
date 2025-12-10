@@ -1,39 +1,39 @@
 COMMAND_ALLOWLIST = {
-    # Comandos de Guest (Todos + Miembros + Admin)
-    "ayuda": {"guest", "member", "admin"},
+    # Guest commands (Everyone + Members + Admin)
+    "help": {"guest", "member", "admin"},
     "start": {"guest", "member", "admin"},
-    "sobre": {"guest", "member", "admin"},
+    "about": {"guest", "member", "admin"},
 
-    # Comandos de Member (Miembros + Admin)
-    "proxima_sesion": {"member", "admin"},
-    "confirmar": {"member", "admin"},
-    "ausente": {"member", "admin"},
-    "quien_viene": {"member", "admin"},
+    # Member commands (Members + Admin)
+    "next_session": {"member", "admin"},
+    "confirm": {"member", "admin"},
+    "absent": {"member", "admin"},
+    "who_comes": {"member", "admin"},
     
-    "recurso": {"member", "admin"},
-    "agregar_recurso": {"member", "admin"},
-    "recursos_recientes": {"member", "admin"},
-    "categorias": {"member", "admin"},
+    "resource": {"member", "admin"},
+    "add_resource": {"member", "admin"},
+    "recent_resources": {"member", "admin"},
+    "categories": {"member", "admin"},
     
-    "recordar": {"member", "admin"},
-    "recordatorios": {"member", "admin"},
+    "remind": {"member", "admin"},
+    "reminders": {"member", "admin"},
     
     "github_status": {"member", "admin"},
-    "mis_prs": {"member", "admin"},
-    "mis_issues": {"member", "admin"},
+    "my_prs": {"member", "admin"},
+    "my_issues": {"member", "admin"},
     
-    "mi_perfil": {"member", "admin"},
-    "tareas": {"member", "admin"},
+    "my_profile": {"member", "admin"},
+    "tasks": {"member", "admin"},
     "stats": {"member", "admin"},
     "ranking": {"member", "admin"},
 
-    # Comandos de Admin (Solo Admin)
-    "convocar": {"admin"},
-    "promover": {"admin"},
-    "degradar": {"admin"},
-    "info_member": {"admin"},
-    "anuncio": {"admin"},
-    "expulsar": {"admin"},
+    # Admin commands (Admin only)
+    "summon": {"admin"},
+    "promote": {"admin"},
+    "demote": {"admin"},
+    "member_info": {"admin"},
+    "announce": {"admin"},
+    "kick": {"admin"},
     "warn": {"admin"},
-    "miembros": {"admin"}
+    "members": {"admin"}
 }
