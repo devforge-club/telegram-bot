@@ -12,7 +12,7 @@ class Resource(BaseModel):
     added_at: datetime
         
     def __str__(self) -> str:
-        return f"Resource: {self.id} {self.title}, was added by: {self.added_by} "
+        return f"Resource: {self.title}, was added by: {self.added_by} "
     
     def format_link(self) -> str:
         return (f"[{self.title}]({self.url})")

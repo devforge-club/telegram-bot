@@ -3,12 +3,12 @@ from .record import Record
 from .bot_rol import BotRol, Guest
 from .dev_role import DevRole
 from typing import Self
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 class User(BaseModel):
     """
-    Clase para representar a los usuarios del bot
+    Class to represent the bot's users
     """
     
     telegram_id: str = Field(min_length=2, max_length=24)
@@ -19,16 +19,22 @@ class User(BaseModel):
     joined_at: datetime
     dev_rol: DevRole 
 
+    @model_validator
+    def set_default_record(self):
+        self.record = Record() if not isinstance(self.bot_rol, Guest) else None
+        return self
+
+
     def __str__(self) -> str:
-        return f"Nombre: {self.name}\n Nombre de Usuario: {self.username}\n {self.bot_rol}\n Se unió el {self.joined_at}"
+        return f"Name: {self.name}\n Username: {self.username}\n {self.bot_rol}\n Joined in: {self.joined_at}"
 
     def have_permission(self, command: str) -> bool:
-        """Comprueba si el usuario tiene permiso de ejecutar un comando
+        """Check if the user has permission to execute a command
 
-        Args:
-            command (str): El comando que se desea comprobar
+            Args:
+            command (str): The command you want to check
 
-        Returns:
-            bool: Devuelve `True` o `False` en dependencia de si el usuario tiene permiso o no
+            Returns:
+            bool: Returns `True` or `False` depending on whether the user has permission or not
         """
         return self.bot_rol.can_access_command(command)

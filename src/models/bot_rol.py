@@ -22,7 +22,7 @@ class Admin(BotRol):
     def __init__(self):
         defaults = {
             "key":"admin", 
-            "name":"Administrador", 
+            "name":"Admin", 
             "hierarchy":100,
             "min_rank_required":1300
         }
@@ -32,7 +32,7 @@ class Member(BotRol):
     def __init__(self):
         defaults = {
                 "key":"member", 
-                "name":"Miembro", 
+                "name":"Membre", 
                 "hierarchy":25,
                 "min_rank_required":0
         }
@@ -43,7 +43,7 @@ class Guest(BotRol):
     def __init__(self):
         defaults = {
                 "key":"guest", 
-                "name":"Invitado", 
+                "name":"Guest", 
                 "hierarchy":1,
                 "min_rank_required":0
         }

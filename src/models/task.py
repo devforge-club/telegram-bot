@@ -58,7 +58,7 @@ class Task(BaseModel):
         return False
 
     def complete(self) -> Dict[str, Any]:
-        """Completa la tarea y retorna información sobre la completación"""
+        """Complete the task and return information about the completion"""
 
         success = (
             True
@@ -78,17 +78,17 @@ class Task(BaseModel):
         }
 
     def cancel(self, reason: str = "") -> bool:
-        """Cancela la tarea con una razón opcional"""
+        """Cancel the task with an optional reason"""
         if self.status in [TaskStatus.COMPLETED, TaskStatus.CANCELLED]:
             return False
 
         self.status = TaskStatus.CANCELLED
         if reason:
-            self.add_note(f"Tarea cancelada: {reason}")
+            self.add_note(f"Task canceled: {reason}")
         return True
 
     def is_overdue(self) -> bool:
-        """Verifica si la tarea está vencida"""
+        """Check if the task is overdue"""
         if not self.due_date:
             return False
 
@@ -98,21 +98,21 @@ class Task(BaseModel):
         return datetime.now() > self.due_date
 
     def update_status_if_overdue(self) -> bool:
-        """Actualiza el estado a OVERDUE si corresponde"""
+        """Update the status to OVERDUE if applicable"""
         if self.is_overdue():
             self.status = TaskStatus.OVERDUE
             return True
         return False
 
     def get_time_remaining(self) -> Dict[str, Any]:
-        """Calcula el tiempo restante hasta la fecha límite"""
+        """Calculate the time remaining until the deadline"""
         if not self.due_date:
             return {
                 "has_deadline": False,
                 "is_overdue": None,
                 "days": None,
                 "hours": None,
-                "human_readable": "Sin fecha límite",
+                "human_readable": "No limit date",
             }
 
         now = datetime.now()
@@ -127,18 +127,18 @@ class Task(BaseModel):
         # Crear mensaje legible
         if is_overdue:
             if days > 0:
-                human_readable = f"Vencida hace {days} día{'s' if days != 1 else ''}"
+                human_readable = f"Expired since: {days} Day{'s' if days != 1 else ''}"
                 if hours > 0:
-                    human_readable += f", {hours} hora{'s' if hours != 1 else ''}"
+                    human_readable += f", {hours} hour{'s' if hours != 1 else ''}"
             else:
-                human_readable = f"Vencida hace {hours} hora{'s' if hours != 1 else ''}"
+                human_readable = f"Expired since: {hours} hour{'s' if hours != 1 else ''}"
         else:
             if days > 0:
-                human_readable = f"{days} día{'s' if days != 1 else ''}"
+                human_readable = f"{days} day{'s' if days != 1 else ''}"
                 if hours > 0:
-                    human_readable += f", {hours} hora{'s' if hours != 1 else ''}"
+                    human_readable += f", {hours} hour{'s' if hours != 1 else ''}"
             else:
-                human_readable = f"{hours} hora{'s' if hours != 1 else ''}"
+                human_readable = f"{hours} hour{'s' if hours != 1 else ''}"
 
         return {
             "has_deadline": True,
@@ -149,7 +149,7 @@ class Task(BaseModel):
         }
 
     def add_note(self, note: str) -> None:
-        """Añade una nota con timestamp a la tarea"""
+        """Add a note with a timestamp to the task"""
         if self.notes is None:
             self.notes = []
 
@@ -158,16 +158,16 @@ class Task(BaseModel):
     # Propiedades calculadas
     @property
     def is_completed(self) -> bool:
-        """Verifica si la tarea está completada"""
+        """Check if the task is completed"""
         return self.status == TaskStatus.COMPLETED
 
     @property
     def is_active(self) -> bool:
-        """Verifica si la tarea está activa (pending o in progress)"""
+        """Check if the task is active (pending or in progress)"""
         return self.status in [TaskStatus.PENDING, TaskStatus.IN_PROGRESS]
 
     @property
     def days_since_created(self) -> int:
-        """Calcula días desde que se creó la tarea"""
+        """Calculate days since the task was created"""
         delta = datetime.now() - self.created_at
         return delta.days

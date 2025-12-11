@@ -3,13 +3,13 @@ from uuid import uuid4
 from pydantic import BaseModel, Field
 
 days = [
-    "Lunes", "Martes", "Miércoles", "Jueves",
-    "Viernes", "Sábado", "Domingo"
+    "Monday", "Tuesday", "Wednesday", "Thursday",
+    "Friday", "Saturday", "Sunday"
     ]
 
 months = [
-    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
     ]
         
 
@@ -21,7 +21,7 @@ class Event(BaseModel):
     location: str = Field(min_length=8)
     
     def __str__(self)-> str:
-        return f"📍{self.title}, {self.date}, {self.location}"
+        return f"📍Event: {self.title}, {self.date}, {self.location}\n\nDescription: {self.description}"
     
     def is_upcoming(self)-> bool:
         return self.date > datetime.now()

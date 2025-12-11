@@ -17,29 +17,19 @@ class Reminder(BaseModel):
             self.chat_id = self.user_id
         return self
 
-    """Clase que representa un recordatorio personal programado
+    """Class that represents a scheduled personal reminder
         Args:
-            user_id (str): ID del usuario creador
-            message (str): Texto del recordatorio
-            remind_at (str): Fecha y hora exacta en la que se debe disparar la notificación
-            chat_id (str, optional): Si es `None` toma el valor de `user_id`
-            id (str, optional): Este valor solo se pasa cuando se construye la clase a partir de un diccionaro. Para instancias nuevas el constructor crea un uuid automaticamente.
-            created_at (str, optional): Este valor solo se pasa cuando se construye la clase a partir de un diccionaro. Para instancias nuevas el constructor toma el valor de `datetime.now()`.
+        user_id (str): ID of the user who created it
+        message (str): Reminder text
+        remind_at (str): Exact date and time when the notification should be triggered
+        chat_id (str, optional): If `None`, it takes the value of `user_id`
+        id (str, optional): This value is only passed when building the class from a dictionary. For new instances, the constructor automatically creates a UUID.
+        created_at (str, optional): This value is only passed when building the class from a dictionary. For new instances, the constructor takes the value of `datetime.now()`. 
     """
 
     def __str__(self) -> str:
-        """Retorna un resumen
-
-        Returns:
-            str: ej: "Recordatorio para `self.user_id` a las `self.remind_at` con el mensaje: '`self.message`'"
-        """
-        return f"Recordatorio para {self.user_id} a las {self.remind_at} con el mensaje: '{self.message}'"
+        return f"Scheduled reminder for  {self.remind_at} with the message: '{self.message}'"
 
     def is_due(self) -> bool:
-        """Método auxiliar para que el Job Runner sepa si toca enviar o no.
-
-        Returns:
-            bool: Retorna `True` si `datetime.now()` es mayor o igual a `self.remind_at`.
-        """
         return datetime.now() >= self.remind_at
     
