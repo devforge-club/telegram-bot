@@ -1,58 +1,55 @@
 from typing import Self
+from pydantic import BaseModel
 
-class DevRole:
+class DevRole(BaseModel):
     key: str
     name: str
     icon: str
     
-    def __init__(self, key: str, name: str, icon: str ):
-        self.key = key
-        self.name = name
-        self.icon = icon
-        
     def __str__(self) -> str:
-        return f"{self.icon} {self.name}"
-    
-    def to_dict(self) -> dict:
-        return {
-            "key": self.key,
-            "name": self.name,
-            "icon": self.icon
-        }
-        
-    
-    @classmethod
-    def from_dict(cls, data: dict) -> Self:
-        return cls(**data)
-    
+        return f"Team Rol: {self.name} {self.icon}"
+
 class Backend(DevRole):
     def __init__(self):
-        super().__init__(
-            key = "backend", 
-            name = "Backend Developer", 
-            icon = "⚙️")
-        
+        defaults = {
+            "key":"backend",
+            "name":"Backend Developer",
+            "icon":"⚙️"
+            
+        }
+        super().__init__(**defaults)
+            
 class Frontend(DevRole):
     def __init__(self):
-        super().__init__(
-            key = "frontend", 
-            name = "Frontend Developer", 
-            icon = "🎨")
-        
+        defaults = {
+            "key":"frontend",
+            "name":"Frontend Developer",
+            "icon":"🎨"
+                     
+        }
+        super().__init__(**defaults)
+            
+
 class Tester(DevRole):
     def __init__(self):
-        super().__init__(
-            key = "tester", 
-            name = "QA Tester", 
-            icon = "🧪")
+        defaults = {
+            "key":"tester",
+            "name":"QA Tester",
+            "icon":"🧪"
+            
+        }
+        super().__init__(**defaults)    
+            
         
 class DevOps(DevRole):
     def __init__(self):
-        super().__init__(
-            key = "devops", 
-            name = "DevOps Engineer", 
-            icon = "☁️")
-        
+        defaults = {
+            "key":"devops",
+            "name":"DevOps Engineer",
+            "icon":"☁️"
+                
+        }
+        super().__init__(**defaults)
         
         
 

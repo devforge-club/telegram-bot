@@ -1,39 +1,38 @@
 from dataclasses import dataclass, field, fields
 from datetime import datetime
-from typing import Self, Set, List, Dict, Any, TypedDict, NotRequired, Union
 from src.utils.forge_rank import ForgeRank
 from src.utils.formatters import int_to_roman
+from pydantic import BaseModel, Field
 
 
 LEGEND_ASCENSION_THRESHOLD = 4500
 MAX_STRIKES_ALLOWED = 3
 
 
-class ScoreEntry(TypedDict):
+class ScoreEntry(BaseModel):
     timestamp: datetime
     points: int
     reason: str
 
 
-class StrikeEntry(TypedDict):
+class StrikeEntry(BaseModel):
     timestamp: datetime
     action: str
     reason: str
     details: str
 
 
-class RankEntry(TypedDict):
+class RankEntry(BaseModel):
     timestamp: datetime
     old_rank: str
     new_rank: str
-    legend_ascension: NotRequired[str]
+    legend_ascension: str | None = None
 
 
-HistoryEntry = Union[ScoreEntry, StrikeEntry, RankEntry]
+HistoryEntry = ScoreEntry | StrikeEntry | RankEntry
 
 
-@dataclass
-class Record:
+class Record(BaseModel):
 
     # Core metrics
     score: int = 0
@@ -48,24 +47,20 @@ class Record:
     prs_merged: int = 0
     prs_rejected: int = 0
     code_reviews_done: int = 0
-    projects_completed: Set[str] = field(default_factory=set)
+    projects_completed: set[str] = Field(default_factory=set)
 
     # Strikes
     strikes: int = 0
-    strike_history: List[StrikeEntry] = field(default_factory=list)
+    strike_history: list[StrikeEntry] = Field(default_factory=list)
     last_strike_date: datetime | None = None
 
     # Control & metadata
-    current_projects: Set[str] = field(default_factory=set)
+    current_projects: set[str] = Field(default_factory=set)
     last_github_sync: datetime | None = None
-    score_history: List[ScoreEntry] = field(default_factory=list)
-    rank_history: List[RankEntry] = field(default_factory=list)
+    score_history: list[ScoreEntry] = Field(default_factory=list)
+    rank_history: list[RankEntry] = Field(default_factory=list)
 
-    def add_score(self, points: int, reason: str) -> Dict[str, Any]:
-        if points <= 0:
-            raise ValueError(f"Points must be greater than zero, got: {points}")
-        if not reason or not reason.strip():
-            raise ValueError("Reason for score addition must be provided")
+    def add_score(self, points: int, reason: str) -> dict:
         self.score += points
         old_rank = self.rank
         new_rank = ForgeRank.get_rank_by_score(self.score)
@@ -125,7 +120,7 @@ class Record:
             return True
         return False
 
-    def ascend_to_legend(self) -> Dict[str, Any]:
+    def ascend_to_legend(self) -> dict[str, object]:
         success = self.score >= LEGEND_ASCENSION_THRESHOLD
         old_rank = self.rank
 
@@ -153,7 +148,7 @@ class Record:
             "message": message,
         }
 
-    def get_progress_to_next_rank(self) -> Dict[str, Any]:
+    def get_progress_to_next_rank(self) -> dict:
         next_rank = ForgeRank.get_next_rank(self.rank)
         if next_rank is None:
             progress_percentage = 100.0
@@ -241,7 +236,7 @@ class Record:
             rank = f"{self.legend_badge} • {rank}"
         return rank
 
-    def get_stats_summary(self) -> Dict[str, Any]:
+    def get_stats_summary(self) -> dict:
         return {
             "rank": self.display_rank,
             "score": self.score,
@@ -263,73 +258,5 @@ class Record:
             "count_current_projects": len(self.current_projects),
         }
 
-    @staticmethod
-    def serialize_history(history: List[HistoryEntry]) -> List[dict]:
-        return [
-            {
-                k: v.isoformat() if isinstance(v, datetime) else v
-                for k, v in entry.items()
-            }
-            for entry in history
-        ]
-
-    @staticmethod
-    def deserialize_history(history: List[dict]) -> List[HistoryEntry]:
-        return [
-            {
-                k: datetime.fromisoformat(v) if k == "timestamp" else v
-                for k, v in entry.items()
-            }
-            for entry in history
-        ]
-
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "score": self.score,
-            "rank": self.rank.display_name,
-            "legend_level": self.legend_level,
-            "issues_completed": self.issues_completed,
-            "issues_on_time": self.issues_on_time,
-            "issues_late": self.issues_late,
-            "prs_created": self.prs_created,
-            "prs_merged": self.prs_merged,
-            "prs_rejected": self.prs_rejected,
-            "code_reviews_done": self.code_reviews_done,
-            "projects_completed": list(self.projects_completed),
-            "strikes": self.strikes,
-            "strike_history": self.serialize_history(self.strike_history),
-            "last_strike_date": (
-                self.last_strike_date.isoformat() if self.last_strike_date else None
-            ),
-            "current_projects": list(self.current_projects),
-            "last_github_sync": (
-                self.last_github_sync.isoformat() if self.last_github_sync else None
-            ),
-            "score_history": self.serialize_history(self.score_history),
-            "rank_history": self.serialize_history(self.rank_history),
-        }
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> Self:
-        valid_fields = {f.name for f in fields(cls)}
-
-        clean_data = {
-            k: v for k, v in data.items() if v is not None and k in valid_fields
-        }
-
-        parse_data = {}
-        for k, v in clean_data.items():
-            if k in ("last_github_sync", "last_strike_date"):
-                parse_data[k] = datetime.fromisoformat(v) if v else None
-            elif k in ("score_history", "rank_history", "strike_history"):
-                parse_data[k] = cls.deserialize_history(v)
-            elif k == "rank":
-                parse_data[k] = ForgeRank.get_rank_by_display_name(v)
-            elif k == "projects_completed" or k == "current_projects":
-                parse_data[k] = set(v)
-            else:
-                parse_data[k] = v
-        return cls(**parse_data)
-
     def __str__(self) -> str:
-        return f"Record(rank={self.display_rank}, score={self.score}, strikes={self.strikes})"
+        return f"Rank: {self.display_rank}, Score: {self.score}, Strikes: {self.strikes})"

@@ -3,108 +3,38 @@ from .record import Record
 from .bot_rol import BotRol, Guest
 from .dev_role import DevRole
 from typing import Self
+from pydantic import BaseModel, Field, model_validator
 
 
-class User:
+class User(BaseModel):
     """
-    Clase para representar a los usuarios del bot
+    Class to represent the bot's users
     """
-
-    telegram_id: str
-    username: str
-    name: str
-    bot_rol: BotRol
+    
+    telegram_id: str = Field(min_length=2, max_length=24)
+    username: str = Field(min_length=2, max_length=24)
+    name: str = Field(min_length=1, max_lenght=50)
+    bot_rol: BotRol 
     record: Record | None
     joined_at: datetime
     dev_rol: DevRole 
 
-    def __init__(
-        self,
-        telegram_id: str,
-        username: str,
-        name: str,
-        bot_rol: BotRol,
-        joined_at: datetime | None = None,
-        dev_rol: DevRole | None = None,
-    ):
-        """Constructor de la clase User
-
-        Args:
-            telegram_id (str):
-            username (str):
-            name (str):
-            bot_rol (BotRol):
-            record: (Record):
-            joined_at (datetime | None, optional): En caso de ser None se toma el valor de datetime.now(). Defaults to None.
-            dev_rol: (DevRole):
-        """
-        self.telegram_id = telegram_id
-        self.username = username
-        self.name = name
-        self.bot_rol = bot_rol
+    @model_validator
+    def set_default_record(self):
         self.record = Record() if not isinstance(self.bot_rol, Guest) else None
-        self.joined_at = joined_at if joined_at else datetime.now()
-        self.dev_rol = dev_rol
+        return self
+
 
     def __str__(self) -> str:
-        return self.name
-
-    def to_dict(self) -> dict:
-        """Devuelve una representación en forma de diccionario de esta instancia
-
-        Returns:
-            dict: Diccionario con las claves:
-            - "telegram_id" (str)
-            - "username" (str)
-            - "name" (str)
-            - "bot_rol" (BotRol)
-            - "record" (Record | None)
-            - "joined_at": string en formato ISO
-        """
-        return {
-            "telegram_id": self.telegram_id,
-            "username": self.username,
-            "name": self.name,
-            "bot_rol": self.bot_rol.to_dict(),
-            "record": self.record.to_dict() if self.record else None,
-            "joined_at": self.joined_at.isoformat(),
-            "dev_rol": self.dev_rol.to_dict() if self.dev_rol else None,
-        }
-
-    @classmethod
-    def from_dict(cls, data: dict) -> Self:
-        """Crea una instancia de la clase a partir de un diccionario
-
-        Args:
-            data (dict): claves requeridas:
-                - "telegram_id" (str)
-                - "username" (str)
-                - "name" (str)
-                - "bot_rol" (BotRol)
-                - "record" (Record | None)
-                - "joined_at": string en formato ISO
-
-
-        Returns:
-            User: nueva instancia de la clase
-        """
-        return cls(
-            telegram_id=data["telegram_id"],
-            username=data["username"],
-            name=data["name"],
-            bot_rol=BotRol.from_dict(data["bot_rol"]),
-            record=Record.from_dict(data["record"]) if data["record"] else None,
-            joined_at=datetime.fromisoformat(data["joined_at"]),
-            dev_rol=DevRole.from_dict(data["dev_rol"]) if data["dev_rol"] else None,
-        )
+        return f"Name: {self.name}\n Username: {self.username}\n {self.bot_rol}\n Joined in: {self.joined_at}"
 
     def have_permission(self, command: str) -> bool:
-        """Comprueba si el usuario tiene permiso de ejecutar un comando
+        """Check if the user has permission to execute a command
 
-        Args:
-            command (str): El comando que se desea comprobar
+            Args:
+            command (str): The command you want to check
 
-        Returns:
-            bool: Devuelve `True` o `False` en dependencia de si el usuario tiene permiso o no
+            Returns:
+            bool: Returns `True` or `False` depending on whether the user has permission or not
         """
         return self.bot_rol.can_access_command(command)

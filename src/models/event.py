@@ -1,53 +1,28 @@
 from datetime import datetime
+from uuid import uuid4
+from pydantic import BaseModel, Field
 
 days = [
-    "Lunes", "Martes", "Miércoles", "Jueves",
-    "Viernes", "Sábado", "Domingo"
+    "Monday", "Tuesday", "Wednesday", "Thursday",
+    "Friday", "Saturday", "Sunday"
     ]
 
 months = [
-    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
     ]
         
 
-class Event:
-    id: int
-    title: str
-    description: str
+class Event(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid4()))
+    title: str = Field(min_length=8, max_length=64)
+    description: str = Field(min_length=24, max_length=256)
     date: datetime
-    location: str
+    location: str = Field(min_length=8)
     
-    def __init__(self, id: int, title:str, description: str, date: datetime, location: str):
-        self.id = id
-        self.title = title
-        self.description = description
-        self.date = date
-        self.location = location
-        
     def __str__(self)-> str:
-        return self.title
+        return f"📍Event: {self.title}, {self.date}, {self.location}\n\nDescription: {self.description}"
     
-    def to_dict(self)-> dict:
-        dictionary = {
-            "id": self.id,
-            "title": self.title,
-            "description": self.description,
-            "date": self.date.isoformat(),
-            "location": self.location
-        }
-        return dictionary
-    
-    @classmethod
-    def from_dict(cls, data:dict)-> "Event":
-        return cls(
-           id=data["id"],
-           title=data["title"],
-           description=data["description"],
-           date=datetime.fromisoformat(data["date"]),
-           location=data["location"] 
-        )
-        
     def is_upcoming(self)-> bool:
         return self.date > datetime.now()
     
@@ -57,12 +32,4 @@ class Event:
         month = months[self.date.month - 1]
         
         return self.date.strftime(f"{day} %d de {month}, %I:%M %p")
-
-
-    
-    
-        
-        
-        
-    
         
