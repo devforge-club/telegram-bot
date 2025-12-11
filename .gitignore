@@ -1,8 +1,8 @@
 # Environment
 .env
-venv/
-__pycache__/*
-__init__.py
+venv
+**/__pycache__
+
 *.pyc
 
 # IDE

@@ -3,10 +3,11 @@ from pydantic import Field
 
 
 class Settings(BaseSettings):
-    bot_token: str | None = Field(default=None, alias="BOT_TOKEN")
-    webhook_secret: str | None = Field(default=None, alias="WEBHOOK_SECRET")
-    group_id: str | None = Field(default=None, alias="GROUP_ID")
-    welcome_topic_id: str | None = Field(default=None, alias="WELCOME_TOPIC_ID")
+    bot_token: str = Field(alias="BOT_TOKEN")
+    domain_url: str = Field(alias="DOMAIN_URL")
+    webhook_secret: str = Field(alias="WEBHOOK_SECRET")
+    group_id: str = Field(alias="GROUP_ID")
+    welcome_topic_id: str = Field(alias="WELCOME_TOPIC_ID")
     model_config = SettingsConfigDict(env_file=".env")
 
 
