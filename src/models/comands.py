@@ -13,3 +13,8 @@ class AboutCommand(SimpleCommand):
 
 
 class ResourceCommand(SimpleCommand): ...
+
+
+class AddResourceCommand(SimpleCommand):
+    url: str = Field(..., pattern=r"^https?://[^\s]+$")
+    categories: str
