@@ -1,4 +1,7 @@
-from pydantic import BaseModel
+from datetime import datetime
+from typing import Optional
+from pydantic import BaseModel, Field
+import re
 
 
 class SimpleCommand(BaseModel):
@@ -7,3 +10,6 @@ class SimpleCommand(BaseModel):
 
 class AboutCommand(SimpleCommand):
     comunity: bool = False
+
+
+class ResourceCommand(SimpleCommand): ...
