@@ -1,4 +1,4 @@
-RESOURCE_CATEGORIES = [
+RESOURCE_CATEGORIES = {
     "backend",
     "frontend",
     "language",
@@ -11,4 +11,4 @@ RESOURCE_CATEGORIES = [
     "advanced",
     "practice",
     "conceptual",
-]
+}
