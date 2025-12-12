@@ -23,3 +23,8 @@ class AddResourceCommand(SimpleCommand):
 class RemindCommand(SimpleCommand):
     at: datetime
 
+
+class SummonCommand(SimpleCommand):
+    description: Optional[str] = None
+    date: datetime
+    location: Optional[str]
