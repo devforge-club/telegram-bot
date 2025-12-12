@@ -28,7 +28,13 @@ class ResourceCommand(SimpleCommand):
 
 class AddResourceCommand(SimpleCommand):
     url: HttpUrl
-    categories: str
+    categories: set[str]
+
+    @field_validator("categories", mode="before")
+    def validate_categories(cls, cats: str) -> set[str]:
+        if isinstance(cats, str):
+            return {c.strip() for c in cats.split(",") if c.strip()}
+        return cats
 
 
 class RemindCommand(SimpleCommand):
@@ -43,7 +49,13 @@ class SummonCommand(SimpleCommand):
 
 class AnnounceCommand(SimpleCommand):
     to: str | None = None
-    topics: str | None = None
+    topics: set[str]
+
+    @field_validator("topics", mode="before")
+    def validate_categories(cls, tops: str) -> set[str]:
+        if isinstance(tops, str):
+            return {t.strip() for t in tops.split(",") if t.strip()}
+        return tops
 
 
 class WarnCommand(SimpleCommand):
