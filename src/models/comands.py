@@ -28,3 +28,8 @@ class SummonCommand(SimpleCommand):
     description: Optional[str] = None
     date: datetime
     location: Optional[str]
+
+
+class AnnounceCommand(SimpleCommand):
+    to: Optional[str] = None
+    topics: Optional[str] = None
