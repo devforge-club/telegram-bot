@@ -33,3 +33,7 @@ class SummonCommand(SimpleCommand):
 class AnnounceCommand(SimpleCommand):
     to: Optional[str] = None
     topics: Optional[str] = None
+
+
+class WarnCommand(SimpleCommand):
+    to: str
