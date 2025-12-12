@@ -1,6 +1,5 @@
 from datetime import datetime
-from typing import Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, HttpUrl
 import re
 
 
@@ -16,7 +15,7 @@ class ResourceCommand(SimpleCommand): ...
 
 
 class AddResourceCommand(SimpleCommand):
-    url: str = Field(..., pattern=r"^https?://[^\s]+$")
+    url: HttpUrl
     categories: str
 
 
@@ -25,14 +24,14 @@ class RemindCommand(SimpleCommand):
 
 
 class SummonCommand(SimpleCommand):
-    description: Optional[str] = None
+    description: str | None = None
     date: datetime
-    location: Optional[str]
+    location: str | None = None
 
 
 class AnnounceCommand(SimpleCommand):
-    to: Optional[str] = None
-    topics: Optional[str] = None
+    to: str | None = None
+    topics: str | None = None
 
 
 class WarnCommand(SimpleCommand):
