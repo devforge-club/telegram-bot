@@ -68,16 +68,16 @@ class Record(BaseModel):
         timestamp = datetime.now()
 
         self.score_history.append(
-            {"timestamp": timestamp, "points": points, "reason": reason}
+            ScoreEntry(**{"timestamp": timestamp, "points": points, "reason": reason})
         )
 
         if rank_up:
             self.rank_history.append(
-                {
+                RankEntry(**{
                     "timestamp": timestamp,
                     "old_rank": old_rank.display_name,
                     "new_rank": new_rank.display_name,
-                }
+                })
             )
 
         self.rank = new_rank
@@ -95,12 +95,12 @@ class Record(BaseModel):
         self.strikes += 1
         timestamp = datetime.now()
         self.strike_history.append(
-            {
+            StrikeEntry(**{
                 "timestamp": timestamp,
                 "action": "added",
                 "reason": reason,
                 "details": details,
-            }
+            })
         )
         self.last_strike_date = timestamp
 
@@ -110,12 +110,12 @@ class Record(BaseModel):
         if self.strikes > 0:
             self.strikes -= 1
             self.strike_history.append(
-                {
+                StrikeEntry(**{
                     "timestamp": datetime.now(),
                     "action": "removed",
                     "reason": reason,
                     "details": details,
-                }
+                })
             )
             return True
         return False
@@ -129,12 +129,12 @@ class Record(BaseModel):
             self.score = 0
             self.rank = ForgeRank.ORE
             self.rank_history.append(
-                {
+                RankEntry(**{
                     "timestamp": datetime.now(),
                     "old_rank": old_rank.display_name,
                     "new_rank": self.rank.display_name,
                     "legend_ascension": f"Ascended to Legend {int_to_roman(self.legend_level)}! Your journey begins anew.",
-                }
+                })
             )
         message = (
             f"A legend of level {self.legend_level} was born!"
