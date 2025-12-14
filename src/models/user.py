@@ -13,13 +13,13 @@ class User(BaseModel):
     
     telegram_id: str = Field(min_length=2, max_length=24)
     username: str = Field(min_length=2, max_length=24)
-    name: str = Field(min_length=1, max_lenght=50)
+    name: str = Field(min_length=1, max_length=50)
     bot_rol: BotRol 
     record: Record | None
     joined_at: datetime
     dev_rol: DevRole 
 
-    @model_validator
+    @model_validator(mode='after')
     def set_default_record(self):
         self.record = Record() if not isinstance(self.bot_rol, Guest) else None
         return self
