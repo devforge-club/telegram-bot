@@ -9,7 +9,7 @@ class SimpleCommand(BaseModel):
 
 
 class AboutCommand(SimpleCommand):
-    comunity: bool = False
+    community: bool = False
 
 
 class ResourceCommand(SimpleCommand):
@@ -52,7 +52,7 @@ class AnnounceCommand(SimpleCommand):
     topics: set[str]
 
     @field_validator("topics", mode="before")
-    def validate_categories(cls, tops: str) -> set[str]:
+    def validate_topics(cls, tops: str) -> set[str]:
         if isinstance(tops, str):
             return {t.strip() for t in tops.split(",") if t.strip()}
         return tops
