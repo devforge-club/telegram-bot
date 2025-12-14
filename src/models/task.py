@@ -71,7 +71,7 @@ class Task(BaseModel):
         return {
             "success": success,
             "was_on_time": (
-                True if self.due_date and self.completed_at <= self.due_date else False
+                True if self.due_date and self.completed_at and self.completed_at <= self.due_date else False
             ),
             "points_earned": self.points_reward if success else 0,
             "task_type": self.task_type,
