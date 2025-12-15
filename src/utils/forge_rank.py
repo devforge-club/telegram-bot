@@ -28,7 +28,7 @@ class ForgeRank(Enum):
         for rank in sorted_ranks:
             if score >= rank.min_score:
                 return rank
-        return cls.ORE
+        return cls['ORE']
 
     @classmethod
     def get_rank_by_display_name(cls, name: str) -> Self | None:
