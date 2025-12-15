@@ -15,16 +15,6 @@ class AboutCommand(SimpleCommand):
 class ResourceCommand(SimpleCommand):
     category: str | None = None
 
-    @field_validator("category")
-    def validate_category(cls, cat: str | None) -> None | str:
-        if cat is None:
-            return cat
-        if cat not in RESOURCE_CATEGORIES:
-            raise ValueError(
-                f"Invalid category '{cat}'. Allowed values are: {', '.join(RESOURCE_CATEGORIES)}"
-            )
-        return cat
-
 
 class AddResourceCommand(SimpleCommand):
     url: HttpUrl
