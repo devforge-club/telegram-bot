@@ -24,9 +24,6 @@ class RankEntry(BaseModel):
     legend_ascension: str | None = None
 
 
-HistoryEntry = StrikeEntry | RankEntry
-
-
 class Record(BaseModel):
 
     # Core metrics
