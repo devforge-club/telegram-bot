@@ -1,18 +1,13 @@
-from dataclasses import dataclass, field, fields
-from datetime import datetime
-from src.utils.forge_rank import ForgeRank
-from src.utils.formatters import int_to_roman
 from pydantic import BaseModel, Field
 
+from datetime import datetime
+
+from src.utils.forge_rank import ForgeRank
+from src.utils.formatters import int_to_roman
+from src.models.score_logs import ScoreLog
 
 LEGEND_ASCENSION_THRESHOLD = 4500
 MAX_STRIKES_ALLOWED = 3
-
-
-class ScoreEntry(BaseModel):
-    timestamp: datetime
-    points: int
-    reason: str
 
 
 class StrikeEntry(BaseModel):
@@ -27,9 +22,6 @@ class RankEntry(BaseModel):
     old_rank: str
     new_rank: str
     legend_ascension: str | None = None
-
-
-HistoryEntry = ScoreEntry | StrikeEntry | RankEntry
 
 
 class Record(BaseModel):
@@ -57,27 +49,23 @@ class Record(BaseModel):
     # Control & metadata
     current_projects: set[str] = Field(default_factory=set)
     last_github_sync: datetime | None = None
-    score_history: list[ScoreEntry] = Field(default_factory=list)
     rank_history: list[RankEntry] = Field(default_factory=list)
 
-    def add_score(self, points: int, reason: str) -> dict:
-        self.score += points
+    def add_score(self, score_log: ScoreLog) -> dict:
+        self.score += score_log.points
         old_rank = self.rank
         new_rank = ForgeRank.get_rank_by_score(self.score)
         rank_up = old_rank != new_rank
-        timestamp = datetime.now()
-
-        self.score_history.append(
-            ScoreEntry(**{"timestamp": timestamp, "points": points, "reason": reason})
-        )
 
         if rank_up:
             self.rank_history.append(
-                RankEntry(**{
-                    "timestamp": timestamp,
-                    "old_rank": old_rank.display_name,
-                    "new_rank": new_rank.display_name,
-                })
+                RankEntry(
+                    **{
+                        "timestamp": score_log.timestamp,
+                        "old_rank": old_rank.display_name,
+                        "new_rank": new_rank.display_name,
+                    }
+                )
             )
 
         self.rank = new_rank
@@ -86,7 +74,7 @@ class Record(BaseModel):
             "rank_up": rank_up,
             "old_rank": old_rank.display_name,
             "new_rank": new_rank.display_name,
-            "points_gained": points,
+            "points_gained": score_log.points,
         }
 
     def add_strike(self, reason: str, details: str = "") -> None:
@@ -95,12 +83,14 @@ class Record(BaseModel):
         self.strikes += 1
         timestamp = datetime.now()
         self.strike_history.append(
-            StrikeEntry(**{
-                "timestamp": timestamp,
-                "action": "added",
-                "reason": reason,
-                "details": details,
-            })
+            StrikeEntry(
+                **{
+                    "timestamp": timestamp,
+                    "action": "added",
+                    "reason": reason,
+                    "details": details,
+                }
+            )
         )
         self.last_strike_date = timestamp
 
@@ -110,12 +100,14 @@ class Record(BaseModel):
         if self.strikes > 0:
             self.strikes -= 1
             self.strike_history.append(
-                StrikeEntry(**{
-                    "timestamp": datetime.now(),
-                    "action": "removed",
-                    "reason": reason,
-                    "details": details,
-                })
+                StrikeEntry(
+                    **{
+                        "timestamp": datetime.now(),
+                        "action": "removed",
+                        "reason": reason,
+                        "details": details,
+                    }
+                )
             )
             return True
         return False
@@ -129,12 +121,14 @@ class Record(BaseModel):
             self.score = 0
             self.rank = ForgeRank.ORE
             self.rank_history.append(
-                RankEntry(**{
-                    "timestamp": datetime.now(),
-                    "old_rank": old_rank.display_name,
-                    "new_rank": self.rank.display_name,
-                    "legend_ascension": f"Ascended to Legend {int_to_roman(self.legend_level)}! Your journey begins anew.",
-                })
+                RankEntry(
+                    **{
+                        "timestamp": datetime.now(),
+                        "old_rank": old_rank.display_name,
+                        "new_rank": self.rank.display_name,
+                        "legend_ascension": f"Ascended to Legend {int_to_roman(self.legend_level)}! Your journey begins anew.",
+                    }
+                )
             )
         message = (
             f"A legend of level {self.legend_level} was born!"
@@ -259,4 +253,6 @@ class Record(BaseModel):
         }
 
     def __str__(self) -> str:
-        return f"Rank: {self.display_rank}, Score: {self.score}, Strikes: {self.strikes})"
+        return (
+            f"Rank: {self.display_rank}, Score: {self.score}, Strikes: {self.strikes})"
+        )
