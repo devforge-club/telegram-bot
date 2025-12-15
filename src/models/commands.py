@@ -1,8 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, HttpUrl, field_validator
 
-from src.utils.resource_categories import RESOURCE_CATEGORIES
-
 
 class SimpleCommand(BaseModel):
     arg: str
