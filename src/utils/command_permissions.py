@@ -1,3 +1,9 @@
+from pydantic import BaseModel
+
+class EmptyModel(BaseModel):
+    pass
+
+
 COMMAND_CONFIG = {
     # Guest commands (Everyone + Members + Admin)
     "help": {"guest", "member", "admin"},

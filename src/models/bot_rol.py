@@ -1,4 +1,4 @@
-from src.utils.command_permissions import COMMAND_ALLOWLIST
+from src.utils.command_permissions import COMMAND_CONFIG
 from pydantic import BaseModel
 
 class BotRol(BaseModel):
@@ -11,7 +11,7 @@ class BotRol(BaseModel):
         return f"Comunity Rol: {self.name}"
     
     def can_access_command(self, command: str) -> bool:
-        if command in COMMAND_ALLOWLIST and self.key in COMMAND_ALLOWLIST[command]:
+        if command in COMMAND_CONFIG and self.key in COMMAND_CONFIG[command]:
             return True
         return False
 
