@@ -6,9 +6,21 @@ class EmptyModel(BaseModel):
 
 COMMAND_CONFIG = {
     # Guest commands (Everyone + Members + Admin)
-    "help": {"guest", "member", "admin"},
-    "start": {"guest", "member", "admin"},
-    "about": {"guest", "member", "admin"},
+    "help": {
+        "roles": {"guest", "member", "admin"},
+        "has_flag": False,
+        "model": None,
+    },
+    "start": {
+        "roles": {"guest", "member", "admin"},
+        "has_flag": False,
+        "model": None,
+    },
+    "about": {
+        "roles": {"guest", "member", "admin"},
+        "has_flag": True,
+        "model": EmptyModel,
+    },
 
     # Member commands (Members + Admin)
     "next_session": {"member", "admin"},
