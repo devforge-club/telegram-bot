@@ -23,27 +23,95 @@ COMMAND_CONFIG = {
     },
 
     # Member commands (Members + Admin)
-    "next_session": {"member", "admin"},
-    "confirm": {"member", "admin"},
-    "absent": {"member", "admin"},
-    "who_comes": {"member", "admin"},
+    "next_session": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+        "model": None,
+    },
+    "confirm": {
+        "roles": {"member", "admin"},
+        "has_flag": True,
+        "model": EmptyModel
+    },
+    "absent": {
+        "roles": {"member", "admin"},
+        "has_flag": True,
+        "model": EmptyModel,
+    },
+    "who_comes": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+        "model": None,
+    },
     
-    "resource": {"member", "admin"},
-    "add_resource": {"member", "admin"},
-    "recent_resources": {"member", "admin"},
-    "categories": {"member", "admin"},
+    "resource": {
+        "roles": {"member", "admin"},
+        "has_flag": True,
+        "model": EmptyModel,
+    },
+    "add_resource": {
+        "roles": {"member", "admin"},
+        "has_flag": True,
+        "model": EmptyModel,
+    },
+    "recent_resources": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+        "model": None,
+    },
+    "categories": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+        "model": None,
+    },
     
-    "remind": {"member", "admin"},
-    "reminders": {"member", "admin"},
+    "remind": {
+        "roles": {"member", "admin"},
+        "has_flag": True,
+        "model": EmptyModel,
+    },
+    "reminders": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+        "model": None,
+    },
     
-    "github_status": {"member", "admin"},
-    "my_prs": {"member", "admin"},
-    "my_issues": {"member", "admin"},
+    "github_status": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+        "model": None,
+    },
+    "my_prs": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+        "model": None,
+    },
+    "my_issues": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+        "model": None,
+    },
     
-    "my_profile": {"member", "admin"},
-    "tasks": {"member", "admin"},
-    "stats": {"member", "admin"},
-    "ranking": {"member", "admin"},
+    "my_profile": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+        "model": None,
+    },
+    "tasks": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+        "model": None,
+    },
+    "stats": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+        "model": None,
+    },
+    "ranking": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+        "model": None,
+    },
 
     # Admin commands (Admin only)
     "summon": {"admin"},
