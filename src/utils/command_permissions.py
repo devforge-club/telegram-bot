@@ -1,4 +1,4 @@
-COMMAND_ALLOWLIST = {
+COMMAND_CONFIG = {
     # Guest commands (Everyone + Members + Admin)
     "help": {"guest", "member", "admin"},
     "start": {"guest", "member", "admin"},
