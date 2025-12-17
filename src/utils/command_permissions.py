@@ -114,12 +114,44 @@ COMMAND_CONFIG = {
     },
 
     # Admin commands (Admin only)
-    "summon": {"admin"},
-    "promote": {"admin"},
-    "demote": {"admin"},
-    "member_info": {"admin"},
-    "announce": {"admin"},
-    "kick": {"admin"},
-    "warn": {"admin"},
-    "members": {"admin"}
+    "summon": {
+        "roles": {"admin"},
+        "has_flag": True,
+        "model": EmptyModel,
+    },
+    "promote": {
+        "roles": {"admin"},
+        "has_flag": True,
+        "model": EmptyModel,
+    },
+    "demote": {
+        "roles": {"admin"},
+        "has_flag": True,
+        "model": EmptyModel,
+    },
+    "member_info": {
+        "roles": {"admin"},
+        "has_flag": True,
+        "model": EmptyModel,
+    },
+    "announce": {
+        "roles": {"admin"},
+        "has_flag": True,
+        "model": EmptyModel,
+    },
+    "kick": {
+        "roles": {"admin"},
+        "has_flag": True,
+        "model": EmptyModel,
+    },
+    "warn": {
+        "roles": {"admin"},
+        "has_flag": True,
+        "model": EmptyModel,
+    },
+    "members": {
+        "roles": {"admin"},
+        "has_flag": False,
+        "model": None,
+    },
 }
