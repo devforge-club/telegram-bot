@@ -1,10 +1,11 @@
 from pydantic import BaseModel
+from typing import Dict
 
 class EmptyModel(BaseModel):
     pass
 
 
-COMMAND_CONFIG = {
+COMMAND_CONFIG: Dict[str, dict] = {
     # Guest commands (Everyone + Members + Admin)
     "help": {
         "roles": {"guest", "member", "admin"},
