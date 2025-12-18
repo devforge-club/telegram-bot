@@ -11,9 +11,7 @@ class BotRol(BaseModel):
         return f"Comunity Rol: {self.name}"
     
     def can_access_command(self, command: str) -> bool:
-        if command in COMMAND_CONFIG and self.key in COMMAND_CONFIG[command]["roles"]:
-            return True
-        return False
+        return command in COMMAND_CONFIG and self.key in COMMAND_CONFIG[command]["roles"]
 
 class Admin(BotRol):
     def __init__(self):
