@@ -1,158 +1,133 @@
-from pydantic import BaseModel
+from src.models.commands import * 
 from typing import Dict
-
-class EmptyModel(BaseModel):
-    pass
-
 
 COMMAND_CONFIG: Dict[str, dict] = {
     # Guest commands (Everyone + Members + Admin)
     "help": {
         "roles": {"guest", "member", "admin"},
         "has_flag": False,
-        "model": None,
     },
     "start": {
         "roles": {"guest", "member", "admin"},
         "has_flag": False,
-        "model": None,
     },
     "about": {
         "roles": {"guest", "member", "admin"},
         "has_flag": True,
-        "model": EmptyModel,
+        "model": AboutCommand,
     },
 
     # Member commands (Members + Admin)
     "next_session": {
         "roles": {"member", "admin"},
         "has_flag": False,
-        "model": None,
     },
     "confirm": {
         "roles": {"member", "admin"},
-        "has_flag": True,
-        "model": EmptyModel
+        "has_flag": False,
     },
     "absent": {
         "roles": {"member", "admin"},
-        "has_flag": True,
-        "model": EmptyModel,
+        "has_flag": False,
     },
     "who_comes": {
         "roles": {"member", "admin"},
         "has_flag": False,
-        "model": None,
     },
     
     "resource": {
         "roles": {"member", "admin"},
         "has_flag": True,
-        "model": EmptyModel,
+        "model": ResourceCommand,
     },
     "add_resource": {
         "roles": {"member", "admin"},
         "has_flag": True,
-        "model": EmptyModel,
+        "model": AddResourceCommand,
     },
     "recent_resources": {
         "roles": {"member", "admin"},
         "has_flag": False,
-        "model": None,
     },
     "categories": {
         "roles": {"member", "admin"},
         "has_flag": False,
-        "model": None,
     },
     
     "remind": {
         "roles": {"member", "admin"},
         "has_flag": True,
-        "model": EmptyModel,
+        "model": RemindCommand,
     },
     "reminders": {
         "roles": {"member", "admin"},
         "has_flag": False,
-        "model": None,
     },
     
     "github_status": {
         "roles": {"member", "admin"},
         "has_flag": False,
-        "model": None,
     },
     "my_prs": {
         "roles": {"member", "admin"},
         "has_flag": False,
-        "model": None,
     },
     "my_issues": {
         "roles": {"member", "admin"},
         "has_flag": False,
-        "model": None,
     },
     
     "my_profile": {
         "roles": {"member", "admin"},
         "has_flag": False,
-        "model": None,
     },
     "tasks": {
         "roles": {"member", "admin"},
         "has_flag": False,
-        "model": None,
     },
     "stats": {
         "roles": {"member", "admin"},
         "has_flag": False,
-        "model": None,
     },
     "ranking": {
         "roles": {"member", "admin"},
         "has_flag": False,
-        "model": None,
     },
 
     # Admin commands (Admin only)
     "summon": {
         "roles": {"admin"},
         "has_flag": True,
-        "model": EmptyModel,
+        "model": SummonCommand,
     },
     "promote": {
         "roles": {"admin"},
-        "has_flag": True,
-        "model": EmptyModel,
+        "has_flag": False,
     },
     "demote": {
         "roles": {"admin"},
-        "has_flag": True,
-        "model": EmptyModel,
+        "has_flag": False,
     },
     "member_info": {
         "roles": {"admin"},
-        "has_flag": True,
-        "model": EmptyModel,
+        "has_flag": False,
     },
     "announce": {
         "roles": {"admin"},
         "has_flag": True,
-        "model": EmptyModel,
+        "model": AnnounceCommand,
     },
     "kick": {
         "roles": {"admin"},
-        "has_flag": True,
-        "model": EmptyModel,
+        "has_flag": False,
     },
     "warn": {
         "roles": {"admin"},
         "has_flag": True,
-        "model": EmptyModel,
+        "model": WarnCommand,
     },
     "members": {
         "roles": {"admin"},
         "has_flag": False,
-        "model": None,
     },
 }
