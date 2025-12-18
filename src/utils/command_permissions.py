@@ -1,5 +1,13 @@
-from src.models.commands import * 
 from typing import Dict
+from src.models.commands import (
+    AboutCommand,
+    ResourceCommand,
+    AddResourceCommand,
+    RemindCommand,
+    SummonCommand,
+    AnnounceCommand,
+    WarnCommand,
+)
 
 COMMAND_CONFIG: Dict[str, dict] = {
     # Guest commands (Everyone + Members + Admin)
