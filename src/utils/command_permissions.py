@@ -1,39 +1,140 @@
-COMMAND_ALLOWLIST = {
+from src.models.commands import (
+    AboutCommand,
+    ResourceCommand,
+    AddResourceCommand,
+    RemindCommand,
+    SummonCommand,
+    AnnounceCommand,
+    WarnCommand,
+)
+
+COMMAND_CONFIG: dict[str, dict] = {
     # Guest commands (Everyone + Members + Admin)
-    "help": {"guest", "member", "admin"},
-    "start": {"guest", "member", "admin"},
-    "about": {"guest", "member", "admin"},
+    "help": {
+        "roles": {"guest", "member", "admin"},
+        "has_flag": False,
+    },
+    "start": {
+        "roles": {"guest", "member", "admin"},
+        "has_flag": False,
+    },
+    "about": {
+        "roles": {"guest", "member", "admin"},
+        "has_flag": True,
+        "model": AboutCommand,
+    },
 
     # Member commands (Members + Admin)
-    "next_session": {"member", "admin"},
-    "confirm": {"member", "admin"},
-    "absent": {"member", "admin"},
-    "who_comes": {"member", "admin"},
+    "next_session": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+    },
+    "confirm": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+    },
+    "absent": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+    },
+    "who_comes": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+    },
     
-    "resource": {"member", "admin"},
-    "add_resource": {"member", "admin"},
-    "recent_resources": {"member", "admin"},
-    "categories": {"member", "admin"},
+    "resource": {
+        "roles": {"member", "admin"},
+        "has_flag": True,
+        "model": ResourceCommand,
+    },
+    "add_resource": {
+        "roles": {"member", "admin"},
+        "has_flag": True,
+        "model": AddResourceCommand,
+    },
+    "recent_resources": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+    },
+    "categories": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+    },
     
-    "remind": {"member", "admin"},
-    "reminders": {"member", "admin"},
+    "remind": {
+        "roles": {"member", "admin"},
+        "has_flag": True,
+        "model": RemindCommand,
+    },
+    "reminders": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+    },
     
-    "github_status": {"member", "admin"},
-    "my_prs": {"member", "admin"},
-    "my_issues": {"member", "admin"},
+    "github_status": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+    },
+    "my_prs": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+    },
+    "my_issues": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+    },
     
-    "my_profile": {"member", "admin"},
-    "tasks": {"member", "admin"},
-    "stats": {"member", "admin"},
-    "ranking": {"member", "admin"},
+    "my_profile": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+    },
+    "tasks": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+    },
+    "stats": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+    },
+    "ranking": {
+        "roles": {"member", "admin"},
+        "has_flag": False,
+    },
 
     # Admin commands (Admin only)
-    "summon": {"admin"},
-    "promote": {"admin"},
-    "demote": {"admin"},
-    "member_info": {"admin"},
-    "announce": {"admin"},
-    "kick": {"admin"},
-    "warn": {"admin"},
-    "members": {"admin"}
+    "summon": {
+        "roles": {"admin"},
+        "has_flag": True,
+        "model": SummonCommand,
+    },
+    "promote": {
+        "roles": {"admin"},
+        "has_flag": False,
+    },
+    "demote": {
+        "roles": {"admin"},
+        "has_flag": False,
+    },
+    "member_info": {
+        "roles": {"admin"},
+        "has_flag": False,
+    },
+    "announce": {
+        "roles": {"admin"},
+        "has_flag": True,
+        "model": AnnounceCommand,
+    },
+    "kick": {
+        "roles": {"admin"},
+        "has_flag": False,
+    },
+    "warn": {
+        "roles": {"admin"},
+        "has_flag": True,
+        "model": WarnCommand,
+    },
+    "members": {
+        "roles": {"admin"},
+        "has_flag": False,
+    },
 }
