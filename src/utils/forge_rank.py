@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Self, Optional
+from typing import Self
 
 
 class ForgeRank(Enum):
