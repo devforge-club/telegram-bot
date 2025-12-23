@@ -58,6 +58,24 @@ class Task(BaseModel):
     @field_serializer("status")
     def serialize_status(self, status: TaskStatus) -> str:
         return status.name
+    
+    @field_validator("difficulty", mode="before") 
+    def validate_difficulty(cls, difficulty: str | IssueDifficulty)-> IssueDifficulty:
+        if isinstance(difficulty, str):
+            return IssueDifficulty[difficulty]
+        return difficulty
+    
+    @field_validator("task_type", mode="before") 
+    def validate_task_type(cls, task: str | TaskType)-> TaskType:
+        if isinstance(task, str):
+            return TaskType[task]
+        return task
+    
+    @field_validator("status", mode="before")
+    def validate_status(cls, status: str | TaskStatus)-> TaskStatus:
+        if isinstance(status, str):
+            return TaskStatus[status]
+        return status
 
     def __str__(self) -> str:
         return f"[{self.difficulty.display_name} ~ {self.status.value}] {self.title}"
