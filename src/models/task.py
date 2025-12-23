@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Dict, List, Any, Self
 from enum import Enum
 from src.utils.issue_difficulty import IssueDifficulty
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field,  field_serializer, field_validator
 
 
 class TaskType(Enum):
@@ -46,6 +46,18 @@ class Task(BaseModel):
     completed_at: datetime | None
     # Metadata
     notes: List[Dict[str, Any]] | None
+    
+    @field_serializer("difficulty")
+    def serialize_difficulty(self, difficulty: IssueDifficulty) -> str:
+        return difficulty.name
+    
+    @field_serializer("task_type")
+    def serialize_task_type(self, task: TaskType) -> str:
+        return task.name
+    
+    @field_serializer("status")
+    def serialize_status(self, status: TaskStatus) -> str:
+        return status.name
 
     def __str__(self) -> str:
         return f"[{self.difficulty.display_name} ~ {self.status.value}] {self.title}"
