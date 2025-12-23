@@ -7,6 +7,20 @@ _client: AsyncMongoClient | None = None
 
 
 def get_database() -> AsyncDatabase:
+    """
+    Returns an AsyncDatabase instance using the Singleton pattern.
+
+    - First call (Cold Start): creates new connection
+    - Subsequent calls (Warm Start): reuses existing connection
+
+    Returns:
+        AsyncDatabase: MongoDB database instance
+
+    Raises:
+        ValueError: If MONGO_URI or DB_NAME are not set
+        ConfigurationError: If the MongoDB URI is malformed
+        RuntimeError: For unexpected connection errors
+    """
     global _client
 
     db_name = os.getenv("DB_NAME")
