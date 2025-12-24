@@ -22,7 +22,7 @@ class Reminder(BaseModel):
         message (str): Reminder text
         remind_at (str): Exact date and time when the notification should be triggered
         chat_id (str, optional): If `None`, it takes the value of `user_id`
-        id (str, optional): This value is only passed when building the class from a dictionary. For new instances, the constructor automatically creates a UUID.
+        id (str, optional): This value is only passed when building the class from a dictionary.
         created_at (str, optional): This value is only passed when building the class from a dictionary. For new instances, the constructor takes the value of `datetime.now()`. 
     """
 
