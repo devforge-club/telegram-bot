@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_serializer, field_validator
 
 from datetime import datetime
 
@@ -50,6 +50,15 @@ class Record(BaseModel):
     current_projects: set[str] = Field(default_factory=set)
     last_github_sync: datetime | None = None
     rank_history: list[RankEntry] = Field(default_factory=list)
+    
+    @field_serializer("rank")
+    def serialize_rank(self, value: ForgeRank) -> str:
+        return value.name
+
+    @field_validator("rank", mode="before")
+    @classmethod
+    def rank_validator(cls, rank: str | ForgeRank) -> ForgeRank:
+        return rank if isinstance(rank, ForgeRank) else ForgeRank[rank]
 
     def add_score(self, score_log: ScoreLog) -> dict:
         self.score += score_log.points
