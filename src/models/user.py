@@ -2,7 +2,6 @@ from datetime import datetime
 from .record import Record
 from .bot_rol import BotRol, Guest
 from .dev_role import DevRole
-from typing import Self
 from pydantic import BaseModel, Field, model_validator
 
 
