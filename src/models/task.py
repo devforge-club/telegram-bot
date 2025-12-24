@@ -1,4 +1,3 @@
-from uuid import uuid4
 from datetime import datetime
 from typing import Dict, List, Any, Self
 from enum import Enum
@@ -24,7 +23,7 @@ class TaskStatus(Enum):
 
 class Task(BaseModel):
     # informacion basica
-    id: str = Field(default_factory=lambda: str(uuid4()))
+    id: str | None = None
     title: str = Field(min_length=4)
     description: str | None = Field(min_length=8, default=None)
     task_type: TaskType
