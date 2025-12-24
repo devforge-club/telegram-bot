@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Dict, List, Any, Self
 from enum import Enum
 from src.utils.issue_difficulty import IssueDifficulty
 from pydantic import BaseModel, Field,  field_serializer, field_validator
@@ -44,7 +43,7 @@ class Task(BaseModel):
     started_at: datetime | None
     completed_at: datetime | None
     # Metadata
-    notes: List[Dict[str, Any]] | None
+    notes: list[dict] | None
     
     @field_serializer("difficulty")
     def serialize_difficulty(self, difficulty: IssueDifficulty) -> str:
@@ -86,7 +85,7 @@ class Task(BaseModel):
             return True
         return False
 
-    def complete(self) -> Dict[str, Any]:
+    def complete(self) -> dict:
         """Complete the task and return information about the completion"""
 
         success = (
@@ -133,7 +132,7 @@ class Task(BaseModel):
             return True
         return False
 
-    def get_time_remaining(self) -> Dict[str, Any]:
+    def get_time_remaining(self) -> dict:
         """Calculate the time remaining until the deadline"""
         if not self.due_date:
             return {
