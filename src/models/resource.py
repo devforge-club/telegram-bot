@@ -1,8 +1,10 @@
 from datetime import datetime
+from typing import Self
+from uuid import uuid4
 from pydantic import BaseModel, Field
 
 class Resource(BaseModel):
-    id: str | None = None
+    id: str = Field(default_factory=lambda: str(uuid4()))
     title: str = Field(min_length=1, max_length=24)
     url: str
     category: str 
