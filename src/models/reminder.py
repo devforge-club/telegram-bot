@@ -1,5 +1,4 @@
 from datetime import datetime
-from uuid import uuid4
 from typing import Self
 from pydantic import BaseModel, Field, model_validator
 
@@ -8,7 +7,7 @@ class Reminder(BaseModel):
     message: str = Field(min_length=1)
     remind_at: datetime
     chat_id: str | None = None
-    id: str = Field(default_factory=lambda: str(uuid4()))
+    id: str | None = None
     created_at: datetime = Field(default_factory=lambda: datetime.now())
     
     @model_validator(mode='after')
