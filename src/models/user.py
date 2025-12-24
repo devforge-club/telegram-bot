@@ -10,7 +10,7 @@ class User(BaseModel):
     """
     Class to represent the bot's users
     """
-    
+    id: str | None = None
     telegram_id: str = Field(min_length=2, max_length=24)
     username: str = Field(min_length=2, max_length=24)
     name: str = Field(min_length=1, max_length=50)
