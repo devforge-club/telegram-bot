@@ -1,5 +1,4 @@
 from datetime import datetime
-from uuid import uuid4
 from pydantic import BaseModel, Field
 
 days = [
@@ -14,7 +13,7 @@ months = [
         
 
 class Event(BaseModel):
-    id: str = Field(default_factory=lambda: str(uuid4()))
+    id: str | None = None
     title: str = Field(min_length=8, max_length=64)
     description: str = Field(min_length=24, max_length=256)
     date: datetime

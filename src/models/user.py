@@ -2,7 +2,6 @@ from datetime import datetime
 from .record import Record
 from .bot_rol import BotRol, Guest
 from .dev_role import DevRole
-from typing import Self
 from pydantic import BaseModel, Field, model_validator
 
 
@@ -10,7 +9,7 @@ class User(BaseModel):
     """
     Class to represent the bot's users
     """
-    
+    id: str | None = None
     telegram_id: str = Field(min_length=2, max_length=24)
     username: str = Field(min_length=2, max_length=24)
     name: str = Field(min_length=1, max_length=50)
