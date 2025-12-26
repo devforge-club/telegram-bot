@@ -3,6 +3,7 @@ from aiogram.types import Update
 
 from src.bot.dispatcher import bot, dispatcher
 from src.core.config import settings
+from src.api.admin import router as admin_router
 
 app = FastAPI(title="Main App")
 
@@ -23,3 +24,5 @@ async def webhook(request: Request):
     await   dispatcher.feed_update(bot=bot, update=update)
 
     return {"ok": True}
+
+app.include_router(router=admin_router)

@@ -8,9 +8,8 @@ class Settings(BaseSettings):
     webhook_secret: str = Field(alias="WEBHOOK_SECRET")
     group_id: str = Field(alias="GROUP_ID")
     welcome_topic_id: str = Field(alias="WELCOME_TOPIC_ID")
+    admin_secret: str= Field(alias="ADMIN_SECRET")
     model_config = SettingsConfigDict(env_file=".env")
 
 
 settings = Settings()
-
-print(settings)
