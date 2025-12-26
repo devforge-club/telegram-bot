@@ -9,7 +9,7 @@ router.get("/init-db", response_model=dict, status_code=status.HTTP_200_OK)
 
 
 async def initialize_db(x_admin_secret: str = Header(...)):
-    if x_admin_secret is None:
+    if settings.admin_secret is None:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="ADMIN_SECRET not configured",
