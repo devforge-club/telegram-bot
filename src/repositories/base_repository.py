@@ -22,4 +22,12 @@ class BaseRepository:
 
         return mapped
 
-    
+    def _to_object_id(self, value: str | None) -> ObjectId | None:
+        
+        if not value:
+            return None
+
+        try:
+            return ObjectId(value)
+        except Exception:
+            return None
