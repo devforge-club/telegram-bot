@@ -4,9 +4,9 @@ from pymongo.asynchronous.database import AsyncDatabase
 
 class BaseRepository:
     
-    def __init__(self, db: AsyncDatabase, collection_name: str):
+    def __init__(self, database: AsyncDatabase, collection_name: str):
         
-        self.collection = db[collection_name]
+        self.collection = database[collection_name]
 
     def _map_doc(self, doc: dict | None) -> dict | None:
         
