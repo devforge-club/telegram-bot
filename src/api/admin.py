@@ -3,11 +3,9 @@ from src.database.init_db import init_indexes
 from fastapi import APIRouter, Header, HTTPException, status
 from src.core.config import settings
 
-router = APIRouter(prefix="/api/admin", tags="admin")
+router = APIRouter(prefix="/api/admin", tags=["admin"])
 
-router.get("/init-db", response_model=dict, status_code=status.HTTP_200_OK)
-
-
+@router.get("/init-db", response_model=dict, status_code=status.HTTP_200_OK)
 async def initialize_db(x_admin_secret: str = Header(...)):
     if settings.admin_secret is None:
         raise HTTPException(
@@ -19,10 +17,9 @@ async def initialize_db(x_admin_secret: str = Header(...)):
 
     db = get_database()
 
-    indexes = init_indexes(db)
+    init_indexes(db)
 
     return {
         "success": True,
         "message": "Database indexes initialized successfully",
-        "indexes_created": indexes,
     }
