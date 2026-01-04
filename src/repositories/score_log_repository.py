@@ -1,4 +1,3 @@
-from datetime import datetime
 from pymongo import DESCENDING
 from pymongo.asynchronous.database import AsyncDatabase
 from .base_repository import BaseRepository
