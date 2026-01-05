@@ -1,7 +1,6 @@
 from pymongo.asynchronous.database import AsyncDatabase
 from ..models.reminder import Reminder
 from datetime import datetime
-from pymongo import ASCENDING
 from base_repository import BaseRepository
 
 
