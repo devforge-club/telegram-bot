@@ -13,11 +13,11 @@ months = [
         
 
 class Event(BaseModel):
-    id: str | None = None
     title: str = Field(min_length=8, max_length=64)
     description: str = Field(min_length=24, max_length=256)
     date: datetime
     location: str = Field(min_length=8)
+    id: str | None = None
     
     def __str__(self)-> str:
         return f"📍Event: {self.title}, {self.date}, {self.location}\n\nDescription: {self.description}"
