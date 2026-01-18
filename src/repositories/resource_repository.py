@@ -12,3 +12,20 @@ class ResourceRepository(BaseRepository):
         result = await self.db.insert_one(data)
         resource.id = str(result.inserted_id)
         return resource
+    
+    async def search(self, query: str) -> list[Resource]:
+        cursor = (
+            self.db.find(
+                {"$text": {"$search": query}},
+                {"score": {"$meta": "textScore"}}
+            ).sort([("score", {"$meta": "textScore"})])
+        )
+
+        results = []
+        async for doc in cursor:
+            mapped = self._map_doc(doc)
+            if mapped == None:
+                continue
+            results.append(Resource(**mapped))
+
+        return results
