@@ -16,7 +16,7 @@ class ResourceRepository(BaseRepository):
     
     async def delete(self, resource_id: str) -> bool:
         oid = self._to_object_id(resource_id)
-        if not oid:
+        if oid is None:
             return False
         result = await self.db.delete_one({"_id": oid})
         return result.deleted_count > 0
@@ -32,7 +32,7 @@ class ResourceRepository(BaseRepository):
         results = []
         async for doc in cursor:
             mapped = self._map_doc(doc)
-            if mapped:
+            if mapped is not None:
                 results.append(Resource(**mapped))
 
         return results
@@ -43,7 +43,7 @@ class ResourceRepository(BaseRepository):
         results = []
         async for doc in cursor:
             mapped = self._map_doc(doc)
-            if mapped:
+            if mapped is not None:
                 results.append(Resource(**mapped))
 
         return results
@@ -58,7 +58,7 @@ class ResourceRepository(BaseRepository):
         results = []
         async for doc in cursor:
             mapped = self._map_doc(doc)
-            if mapped:
+            if mapped is not None:
                 results.append(Resource(**mapped))
 
         return results
