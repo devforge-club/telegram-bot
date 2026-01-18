@@ -1,6 +1,6 @@
 from pymongo import DESCENDING
 from pymongo.asynchronous.database import AsyncDatabase
-from base_repository import BaseRepository
+from src.repositories.base_repository import BaseRepository
 from src.models.resource import Resource
 
 class ResourceRepository(BaseRepository):
@@ -14,6 +14,13 @@ class ResourceRepository(BaseRepository):
         resource.id = str(result.inserted_id)
         return resource
     
+    async def delete(self, resource_id: str) -> bool:
+        oid = self._to_object_id(resource_id)
+        if not oid:
+            return False
+        result = await self.db.delete_one({"_id": oid})
+        return result.deleted_count > 0
+    
     async def search(self, query: str) -> list[Resource]:
         cursor = (
             self.db.find(
@@ -25,8 +32,8 @@ class ResourceRepository(BaseRepository):
         results = []
         async for doc in cursor:
             mapped = self._map_doc(doc)
-            assert mapped is not None
-            results.append(Resource(**mapped))
+            if mapped:
+                results.append(Resource(**mapped))
 
         return results
     
@@ -36,8 +43,8 @@ class ResourceRepository(BaseRepository):
         results = []
         async for doc in cursor:
             mapped = self._map_doc(doc)
-            assert mapped is not None
-            results.append(Resource(**mapped))
+            if mapped:
+                results.append(Resource(**mapped))
 
         return results
     
@@ -51,7 +58,9 @@ class ResourceRepository(BaseRepository):
         results = []
         async for doc in cursor:
             mapped = self._map_doc(doc)
-            assert mapped is not None
-            results.append(Resource(**mapped))
+            if mapped:
+                results.append(Resource(**mapped))
 
         return results
+    
+    
