@@ -1,10 +1,11 @@
 from pymongo import DESCENDING
+from pymongo.asynchronous.database import AsyncDatabase
 from base_repository import BaseRepository
 from src.models.resource import Resource
 
 class ResourceRepository(BaseRepository):
 
-    def __init__(self, database):
+    def __init__(self, database: AsyncDatabase):
         super().__init__(database, "resources")
 
     async def create(self, resource: Resource) -> Resource:
@@ -24,8 +25,33 @@ class ResourceRepository(BaseRepository):
         results = []
         async for doc in cursor:
             mapped = self._map_doc(doc)
-            if mapped == None:
-                continue
+            assert mapped is not None
+            results.append(Resource(**mapped))
+
+        return results
+    
+    async def get_by_category(self, category: str) -> list[Resource]:
+        cursor = self.db.find({"category": category})
+
+        results = []
+        async for doc in cursor:
+            mapped = self._map_doc(doc)
+            assert mapped is not None
+            results.append(Resource(**mapped))
+
+        return results
+    
+    async def get_recent(self, limit: int = 5) -> list[Resource]:
+        cursor = (
+            self.db.find()
+            .sort("added_at", DESCENDING)
+            .limit(limit)
+        )
+
+        results = []
+        async for doc in cursor:
+            mapped = self._map_doc(doc)
+            assert mapped is not None
             results.append(Resource(**mapped))
 
         return results
